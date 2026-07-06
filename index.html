@@ -86,13 +86,16 @@ h1,h2,h3,h4{font-family:var(--head)}
 .screen{display:none;position:relative;z-index:1}
 .screen.on{display:block}
 
-/* ---------- BRIEFING ---------- */
-.brief-wrap{max-width:860px;margin:0 auto;padding:48px 24px 80px}
+/* ---------- BRIEFING (senza scroll: tutto in una schermata) ---------- */
+.brief-wrap{
+  max-width:1060px;margin:0 auto;padding:16px 24px 20px;
+  height:calc(100vh - 64px);display:flex;flex-direction:column;justify-content:center;gap:20px;overflow:hidden;
+}
 .kicker{font-family:var(--mono);font-size:12.5px;letter-spacing:3px;color:var(--cyan);text-transform:uppercase;display:flex;align-items:center;gap:10px}
 .kicker::before{content:"";width:34px;height:1px;background:var(--cyan)}
-.brief-wrap h1{font-size:clamp(30px,4.6vw,46px);font-weight:800;line-height:1.14;margin:14px 0 6px;letter-spacing:-.5px}
+.brief-wrap h1{font-size:clamp(22px,2.8vw,34px);font-weight:800;line-height:1.14;margin:10px 0 4px;letter-spacing:-.4px}
 .brief-wrap h1 em{font-style:normal;color:var(--cyan)}
-.lead{font-size:19px;color:var(--muted);max-width:62ch}
+.lead{font-size:16px;color:var(--muted);max-width:70ch}
 .brief-card{
   margin-top:30px;background:var(--panel);border:1px solid var(--edge);border-radius:16px;
   padding:28px 30px;position:relative;overflow:hidden;
@@ -102,7 +105,7 @@ h1,h2,h3,h4{font-family:var(--head)}
 .brief-card p:last-child{margin-bottom:0}
 .brief-card .voice{color:var(--cyan2)}
 .cmd-inline{font-family:var(--mono);font-size:15.5px;background:#0A2038;border:1px solid var(--edge2);border-radius:6px;padding:2px 8px;color:var(--cyan2);white-space:nowrap}
-.start-row{margin-top:34px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.start-row{margin-top:0;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .btn-gold{
   font-family:var(--head);font-weight:700;font-size:17px;letter-spacing:1.2px;text-transform:uppercase;
   color:#231800;background:linear-gradient(180deg,#FFD97A,var(--gold));
@@ -119,20 +122,20 @@ h1,h2,h3,h4{font-family:var(--head)}
 .brief-mini h3{font-size:15px;letter-spacing:.4px;margin-bottom:4px}
 .brief-mini p{font-size:14.5px;color:var(--muted);line-height:1.5}
 
-/* ---------- BRIEFING AUDIO: player + card sincronizzate ---------- */
+/* ---------- BRIEFING AUDIO: player minimal + popup sincronizzato ---------- */
 .audio-player{
-  margin-top:26px;display:flex;align-items:center;gap:16px;
-  background:var(--panel);border:1px solid var(--edge2);border-radius:16px;padding:16px 20px;position:relative;overflow:hidden;
+  margin-top:0;display:flex;align-items:center;gap:14px;
+  background:var(--panel);border:1px solid var(--edge2);border-radius:14px;padding:11px 16px;position:relative;overflow:hidden;
 }
 .audio-player::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:linear-gradient(180deg,var(--cyan),var(--gold))}
 .ap-play{
-  flex:none;width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;
+  flex:none;width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;
   background:linear-gradient(180deg,var(--cyan2),var(--cyan));display:flex;align-items:center;justify-content:center;
-  box-shadow:0 0 28px rgba(65,199,255,.35);transition:.15s;
+  box-shadow:0 0 24px rgba(65,199,255,.35);transition:.15s;
 }
 .ap-play:hover{transform:scale(1.05)}
 .ap-play:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
-.ap-play svg{width:24px;height:24px;fill:#06121F}
+.ap-play svg{width:20px;height:20px;fill:#06121F}
 .ap-play .ic-pause{display:none}
 .ap-play.playing .ic-play{display:none}
 .ap-play.playing .ic-pause{display:block}
@@ -151,33 +154,58 @@ h1,h2,h3,h4{font-family:var(--head)}
 
 .sync-hint{margin-top:20px;font-family:var(--mono);font-size:12px;letter-spacing:1.5px;color:var(--faint);text-transform:uppercase;display:flex;align-items:center;gap:10px}
 .sync-hint::before{content:"";width:26px;height:1px;background:var(--faint)}
-.sync-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:14px}
-.sync-card{
-  position:relative;background:var(--panel);border:1px solid var(--edge);border-radius:14px;
-  overflow:hidden;transition:border-color .5s, box-shadow .5s, transform .4s;
+/* striscia di miniature: mappa del percorso, cliccabile */
+.sync-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-top:12px}
+.smini{
+  position:relative;border:1px solid var(--edge);border-radius:10px;overflow:hidden;cursor:pointer;
+  background:var(--panel);padding:0;text-align:left;transition:border-color .3s, box-shadow .3s;
 }
-/* immagine HUD in cima */
-.sync-card .sc-img{position:relative;aspect-ratio:16/9;overflow:hidden;background:#04070E;border-bottom:1px solid var(--edge)}
-.sync-card .sc-img img{width:100%;height:100%;object-fit:cover;display:block;
-  filter:blur(7px) brightness(.32) saturate(.6);transform:scale(1.06);opacity:.7;transition:filter .7s, opacity .7s, transform .7s}
-.sync-card.on .sc-img img{filter:none;opacity:1;transform:scale(1)}
-.sync-card .sc-lock{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
-  color:var(--faint);transition:opacity .5s}
-.sync-card .sc-lock svg{width:26px;height:26px;stroke:var(--muted);fill:none}
-.sync-card .sc-voice{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
-.sync-card.on .sc-lock{opacity:0;pointer-events:none}
-/* testo sotto */
-.sync-card .sc-txt{padding:14px 16px 15px}
-.sync-card .sc-n{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--faint)}
-.sync-card h3{font-size:16px;letter-spacing:.2px;margin:3px 0 5px;color:var(--muted);transition:color .5s}
-.sync-card p{font-size:14px;line-height:1.5;color:var(--faint);transition:color .5s, opacity .5s;opacity:.7}
-.sync-card.on{border-color:var(--edge2)}
-.sync-card.on h3{color:var(--text)}
-.sync-card.on p{color:#C6D6EE;opacity:1}
-.sync-card.cur{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan), 0 0 26px rgba(65,199,255,.20);transform:translateY(-3px)}
-.sync-card.cur::after{content:"● IN ASCOLTO";position:absolute;top:10px;left:12px;z-index:2;
-  font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:#06121F;background:var(--gold);
-  border-radius:6px;padding:3px 8px;font-weight:700}
+.smini:hover{border-color:var(--edge2)}
+.smini:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.smini .th{position:relative;aspect-ratio:16/10;display:block;background:#04070E}
+.smini img{width:100%;height:100%;object-fit:cover;display:block;filter:blur(5px) brightness(.3) saturate(.6);transition:filter .6s}
+.smini.on img{filter:none}
+.smini .lk{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.smini .lk svg{width:15px;height:15px;stroke:var(--muted);fill:none}
+.smini.on .lk{display:none}
+.smini .cap{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.4px;color:var(--muted);
+  padding:6px 8px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.smini.on .cap{color:var(--cyan2)}
+.smini.cur{border-color:var(--gold);box-shadow:0 0 14px rgba(242,193,78,.3)}
+
+/* popup della tappa corrente */
+.bpop{position:fixed;inset:0;z-index:150;display:none;align-items:center;justify-content:center;padding:20px;
+  background:rgba(3,8,18,.9);backdrop-filter:blur(6px)}
+.bpop.on{display:flex}
+.bp-inner{width:min(880px,94vw);max-height:94vh;background:var(--bg2);border:1px solid var(--edge2);border-radius:18px;
+  overflow:hidden;display:flex;flex-direction:column;box-shadow:0 40px 100px rgba(0,0,0,.6)}
+.bp-imgwrap{position:relative;background:#000}
+.bp-imgwrap img{width:100%;max-height:54vh;object-fit:contain;display:block}
+.bp-num{position:absolute;top:12px;left:14px;font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--cyan2);
+  background:rgba(7,18,36,.85);border:1px solid var(--edge2);border-radius:7px;padding:4px 10px}
+.bp-txt{padding:15px 26px 4px;text-align:center}
+.bp-txt h2{font-size:21px;margin-bottom:5px}
+.bp-txt p{color:#C6D6EE;font-size:16px;line-height:1.55;max-width:62ch;margin:0 auto}
+.anim{animation:bpin .55s ease}
+@keyframes bpin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.bp-bar{display:flex;align-items:center;gap:12px;padding:14px 20px 16px}
+.bp-btn{width:40px;height:40px;border-radius:50%;flex:none;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,var(--cyan2),var(--cyan))}
+.bp-btn svg{width:16px;height:16px;fill:#06121F}
+.bp-btn .ic-pause{display:none}
+.bp-btn.playing .ic-play{display:none}
+.bp-btn.playing .ic-pause{display:block}
+.bp-btn.x{background:transparent;border:1px solid var(--edge2);border-radius:10px}
+.bp-btn.x svg{fill:none;stroke:var(--muted)}
+.bp-btn.x:hover svg{stroke:var(--text)}
+.bp-bar .ap-bar{flex:1}
+.bp-time{font-family:var(--mono);font-size:11.5px;color:var(--muted);flex:none;letter-spacing:.5px}
+.bp-dots{display:flex;gap:5px;flex:none}
+.bp-dots i{width:15px;height:4px;border-radius:2px;background:#12283F}
+.bp-dots i.done{background:var(--cyan)}
+.bp-dots i.cur{background:var(--gold)}
 
 /* ---------- SALA CONTROLLO ----------
    Griglia 2×2: planisfero largo e basso in alto (colonna centrale +
@@ -522,7 +550,8 @@ g.city.shielded .city-core{fill:var(--teal)}
   .term{order:3;min-height:340px;display:flex}
   .col-left{order:4}
   .logp{min-height:260px}
-  .brief-grid{grid-template-columns:1fr}
+  .brief-wrap{height:auto;min-height:calc(100vh - 64px);overflow:visible;justify-content:flex-start;padding-top:26px}
+  .sync-strip{grid-template-columns:repeat(4,1fr)}
   .deb-stats{grid-template-columns:1fr}
   .app-title .t2{display:none}
 }
@@ -580,18 +609,20 @@ g.city.shielded .city-core{fill:var(--teal)}
 <!-- ================= BRIEFING ================= -->
 <section class="screen on" id="scr-briefing">
   <div class="brief-wrap">
-    <div class="kicker">Briefing · La voce del capo turno</div>
-    <h1>Prima di entrare, <em>ascolta</em> la missione.</h1>
-    <p class="lead">Tre minuti per capire dove stai per mettere le mani. Premi play: le schede qui sotto si accendono man mano che la voce le racconta.</p>
+    <div>
+      <div class="kicker">Briefing · La voce del capo turno</div>
+      <h1>Prima di entrare, <em>ascolta</em> la missione.</h1>
+      <p class="lead">Premi play: il briefing si apre a tutto schermo e le tappe si accendono con la voce. Tocca una miniatura per riascoltare un passaggio.</p>
+    </div>
 
-    <!-- player audio senza distrazioni -->
+    <!-- player audio minimal -->
     <div class="audio-player" id="audioPlayer">
       <button class="ap-play" id="apPlay" aria-label="Riproduci il briefing">
         <svg class="ic-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5-13-7.5z"/></svg>
         <svg class="ic-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
       </button>
       <div class="ap-mid">
-        <div class="ap-label"><span>BRIEFING AUDIO · Andrea Cerioli</span><span class="ap-time"><span id="apCur">0:00</span> / <span id="apDur">3:20</span></span></div>
+        <div class="ap-label"><span>BRIEFING AUDIO · 7 TAPPE</span><span class="ap-time"><span id="apCur">0:00</span> / <span id="apDur">3:20</span></span></div>
         <div class="ap-bar" id="apBar" role="slider" aria-label="Avanzamento audio" tabindex="0">
           <div class="ap-fill" id="apFill"></div>
           <div class="ap-head" id="apHead"></div>
@@ -605,58 +636,7 @@ g.city.shielded .city-core{fill:var(--teal)}
     </div>
 
     <div class="sync-hint">Le tappe del briefing</div>
-    <div class="sync-grid" id="syncGrid">
-
-      <div class="sync-card on" data-t="0">
-        <div class="sc-img"><img src="Cyber_1.jpg" alt="Mappa del mondo: un messaggio da Milano all'Australia" loading="lazy">
-          <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="sc-voice">lo racconta la voce</span></div></div>
-        <div class="sc-txt"><div class="sc-n">01</div><h3>La domanda</h3>
-          <p>In questo momento un messaggio sta attraversando l'oceano. Come fa ad arrivare dall'altra parte del mondo?</p></div>
-      </div>
-
-      <div class="sync-card" data-t="27">
-        <div class="sc-img"><img src="Cyber_2.jpg" alt="Planisfero pieno di nodi: il traffico Internet in tempo reale" loading="lazy">
-          <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="sc-voice">lo racconta la voce</span></div></div>
-        <div class="sc-txt"><div class="sc-n">02</div><h3>La sala di controllo</h3>
-          <p>Entri in una sala di controllo vera: un planisfero vivo con cavi sotto il mare, satelliti e antenne.</p></div>
-      </div>
-
-      <div class="sync-card" data-t="54">
-        <div class="sc-img"><img src="Cyber_4.jpg" alt="Solo tastiera, niente mouse né menu; il taccuino del codice" loading="lazy">
-          <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="sc-voice">lo racconta la voce</span></div></div>
-        <div class="sc-txt"><div class="sc-n">03</div><h3>Si comanda scrivendo</h3>
-          <p>Niente mouse: comandi in inglese, come i professionisti. SEND, PING, TRACE… e HELP se ti serve aiuto.</p></div>
-      </div>
-
-      <div class="sync-card" data-t="90">
-        <div class="sc-img"><img src="Cyber_7.jpg" alt="La scala dei gradi: da Recluta a Cyber Guardian" loading="lazy">
-          <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="sc-voice">lo racconta la voce</span></div></div>
-        <div class="sc-txt"><div class="sc-n">04</div><h3>La carriera</h3>
-          <p>Si parte da Recluta. Quattro livelli, cinque missioni ciascuno. In cima: Cyber Guardian.</p></div>
-      </div>
-
-      <div class="sync-card" data-t="114">
-        <div class="sc-img"><img src="Cyber_6.jpg" alt="Dalla fibra ottica ai metadati: dispositivo, posizione, tempo di connessione" loading="lazy">
-          <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="sc-voice">lo racconta la voce</span></div></div>
-        <div class="sc-txt"><div class="sc-n">05</div><h3>Perché lo fai</h3>
-          <p>Internet lo usi ogni giorno, ma nessuno te lo fa vedere. Oggi lo vedi — e scopri quanto racconta la rete.</p></div>
-      </div>
-
-      <div class="sync-card" data-t="146">
-        <div class="sc-img"><img src="Cyber_8.jpg" alt="System alert: attività strana, meccanismo inceppato, protocollo di riparazione" loading="lazy">
-          <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="sc-voice">lo racconta la voce</span></div></div>
-        <div class="sc-txt"><div class="sc-n">06</div><h3>L'attività strana</h3>
-          <p>Gli strumenti hanno registrato qualcosa di anomalo nella rete. A un certo punto si farà viva…</p></div>
-      </div>
-
-      <div class="sync-card" data-t="180">
-        <div class="sc-img"><img src="Cyber_9.jpg" alt="Benvenuti in sala controllo. Scrivere: HELP" loading="lazy">
-          <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="sc-voice">lo racconta la voce</span></div></div>
-        <div class="sc-txt"><div class="sc-n">07</div><h3>Benvenuto in sala</h3>
-          <p>La domanda dell'inizio non avrà più segreti. Scrivi HELP… e benvenuto in sala controllo.</p></div>
-      </div>
-
-    </div>
+    <div class="sync-strip" id="syncStrip"></div>
 
     <div class="start-row">
       <button class="btn-gold" id="btnStart">Entra in sala controllo</button>
@@ -664,6 +644,32 @@ g.city.shielded .city-core{fill:var(--teal)}
     </div>
   </div>
 </section>
+
+<!-- ================= POPUP BRIEFING (tappa corrente, sincronizzata con la voce) ================= -->
+<div class="bpop" id="briefPop" role="dialog" aria-modal="true" aria-label="Tappa del briefing">
+  <div class="bp-inner">
+    <div class="bp-imgwrap" id="bpImgWrap">
+      <img id="bpImg" src="Cyber_1.jpg" alt="">
+      <div class="bp-num" id="bpNum">01 / 07</div>
+    </div>
+    <div class="bp-txt" id="bpTxt">
+      <h2 id="bpTitle"></h2>
+      <p id="bpText"></p>
+    </div>
+    <div class="bp-bar">
+      <button class="bp-btn" id="bpPlay" aria-label="Riproduci o metti in pausa">
+        <svg class="ic-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5-13-7.5z"/></svg>
+        <svg class="ic-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+      </button>
+      <div class="ap-bar" id="bpProg"><div class="ap-fill" id="bpFill"></div></div>
+      <span class="bp-time"><span id="bpCur">0:00</span> / <span id="bpDur">3:20</span></span>
+      <div class="bp-dots" id="bpDots"></div>
+      <button class="bp-btn x" id="bpClose" aria-label="Chiudi il briefing">
+        <svg viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
 
 <!-- ================= SALA CONTROLLO ================= -->
 <section class="screen" id="scr-sala">
@@ -953,46 +959,104 @@ document.getElementById('btnStart').addEventListener('click',()=>go('sala'));
   const head=document.getElementById('apHead');
   const curT=document.getElementById('apCur');
   const durT=document.getElementById('apDur');
-  const cards=[...document.querySelectorAll('#syncGrid .sync-card')];
   if(!audio) return;
+
+  /* le 7 tappe: tempo (s), immagine, titolo, testo */
+  const BRIEF_CARDS=[
+    {t:0,  img:'Cyber_1.jpg',title:'La domanda',txt:'In questo momento un messaggio sta attraversando l’oceano. Come fa ad arrivare dall’altra parte del mondo?'},
+    {t:27, img:'Cyber_2.jpg',title:'La sala di controllo',txt:'Entri in una sala di controllo vera: un planisfero vivo con cavi sotto il mare, satelliti e antenne.'},
+    {t:54, img:'Cyber_4.jpg',title:'Si comanda scrivendo',txt:'Niente mouse: comandi in inglese, come i professionisti. SEND, PING, TRACE… e HELP se ti serve aiuto.'},
+    {t:90, img:'Cyber_7.jpg',title:'La carriera',txt:'Si parte da Recluta. Quattro livelli, cinque missioni ciascuno. In cima: Cyber Guardian.'},
+    {t:114,img:'Cyber_6.jpg',title:'Perché lo fai',txt:'Internet lo usi ogni giorno, ma nessuno te lo fa vedere. Oggi lo vedi — e scopri quanto racconta la rete.'},
+    {t:146,img:'Cyber_8.jpg',title:'L’attività strana',txt:'Gli strumenti hanno registrato qualcosa di anomalo nella rete. A un certo punto si farà viva…'},
+    {t:180,img:'Cyber_9.jpg',title:'Benvenuto in sala',txt:'La domanda dell’inizio non avrà più segreti. Scrivi HELP… e benvenuto in sala controllo.'}
+  ];
+  const pop=document.getElementById('briefPop');
+  const strip=document.getElementById('syncStrip');
+  const bpPlay=document.getElementById('bpPlay');
+  const bpProg=document.getElementById('bpProg');
+  const bpFill=document.getElementById('bpFill');
+  const bpCur=document.getElementById('bpCur');
+  const bpDur=document.getElementById('bpDur');
+  const bpDots=document.getElementById('bpDots');
+  const LOCK_SVG='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+
+  /* striscia di miniature (mappa del percorso) */
+  BRIEF_CARDS.forEach((c,i)=>{
+    const b=document.createElement('button');
+    b.className='smini'+(i===0?' on':'');
+    b.setAttribute('aria-label','Tappa '+(i+1)+': '+c.title);
+    b.innerHTML='<span class="th"><img src="'+c.img+'" alt="" loading="lazy">'
+      +'<span class="lk">'+LOCK_SVG+'</span></span>'
+      +'<span class="cap">'+String(i+1).padStart(2,'0')+' · '+c.title+'</span>';
+    b.addEventListener('click',()=>{
+      audio.currentTime=c.t+0.05;
+      if(audio.paused) audio.play(); else sync();
+    });
+    strip.appendChild(b);
+  });
+  BRIEF_CARDS.forEach(()=>bpDots.appendChild(document.createElement('i')));
+
   function fmt(s){s=Math.max(0,Math.floor(s||0));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
   function dur(){return isFinite(audio.duration)&&audio.duration>0?audio.duration:200}
-  play.addEventListener('click',()=>{ audio.paused?audio.play():audio.pause(); });
-  audio.addEventListener('play',()=>play.classList.add('playing'));
-  audio.addEventListener('pause',()=>play.classList.remove('playing'));
-  audio.addEventListener('loadedmetadata',()=>{ durT.textContent=fmt(audio.duration); });
+  function openPop(){pop.classList.add('on')}
+  function closePop(){pop.classList.remove('on')}
+  window.closeBriefPop=function(){ if(pop.classList.contains('on')){audio.pause();closePop();} };
+
   let curCard=-1;
+  function renderCard(i){
+    const c=BRIEF_CARDS[i];
+    document.getElementById('bpImg').src=c.img;
+    document.getElementById('bpNum').textContent=String(i+1).padStart(2,'0')+' / '+String(BRIEF_CARDS.length).padStart(2,'0');
+    document.getElementById('bpTitle').textContent=c.title;
+    document.getElementById('bpText').textContent=c.txt;
+    [document.getElementById('bpImgWrap'),document.getElementById('bpTxt')].forEach(el=>{
+      el.classList.remove('anim');void el.offsetWidth;el.classList.add('anim');
+    });
+  }
   function sync(){
     const t=audio.currentTime, d=dur(), pct=Math.min(100,t/d*100);
     fill.style.width=pct+'%'; head.style.left=pct+'%';
-    curT.textContent=fmt(t);
+    bpFill.style.width=pct+'%';
+    curT.textContent=fmt(t); bpCur.textContent=fmt(t);
     let idx=-1;
-    cards.forEach((c,i)=>{
-      const ct=parseFloat(c.dataset.t);
-      if(t>=ct-0.25){ c.classList.add('on'); idx=i; }
+    BRIEF_CARDS.forEach((c,i)=>{ if(t>=c.t-0.25) idx=i; });
+    [...strip.children].forEach((el,i)=>{
+      el.classList.toggle('on', i<=idx);
+      el.classList.toggle('cur', i===idx && !audio.paused);
     });
-    if(idx!==curCard){
-      cards.forEach((c,i)=>c.classList.toggle('cur', i===idx));
-      curCard=idx;
-      if(idx>=0 && document.getElementById('scr-briefing').classList.contains('on')){
-        cards[idx].scrollIntoView({behavior:'smooth',block:'nearest'});
-      }
-    }
+    [...bpDots.children].forEach((el,i)=>{ el.className= i<idx?'done':(i===idx?'cur':''); });
+    if(idx!==curCard){ curCard=idx; if(idx>=0) renderCard(idx); }
   }
   audio.addEventListener('timeupdate',sync);
+  audio.addEventListener('play',()=>{
+    play.classList.add('playing'); bpPlay.classList.add('playing');
+    if(curCard<0) renderCard(0);
+    openPop(); sync();
+  });
+  audio.addEventListener('pause',()=>{
+    play.classList.remove('playing'); bpPlay.classList.remove('playing'); sync();
+  });
   audio.addEventListener('ended',()=>{
-    play.classList.remove('playing');
-    cards.forEach(c=>{c.classList.add('on');c.classList.remove('cur')});
-    curCard=-1;
+    play.classList.remove('playing'); bpPlay.classList.remove('playing');
+    closePop();
+    [...strip.children].forEach(el=>{el.classList.add('on');el.classList.remove('cur')});
     document.getElementById('startNote').textContent='Briefing concluso: entra in sala e scrivi HELP per cominciare.';
   });
+  audio.addEventListener('loadedmetadata',()=>{ durT.textContent=fmt(audio.duration); bpDur.textContent=fmt(audio.duration); });
+
+  play.addEventListener('click',()=>{ audio.paused?audio.play():audio.pause(); });
+  bpPlay.addEventListener('click',()=>{ audio.paused?audio.play():audio.pause(); });
+  document.getElementById('bpClose').addEventListener('click',()=>window.closeBriefPop());
   mute.addEventListener('click',()=>{ audio.muted=!audio.muted; mute.classList.toggle('muted',audio.muted); });
-  function seekAt(clientX){
-    const r=bar.getBoundingClientRect();
+
+  function seekAt(clientX,el){
+    const r=el.getBoundingClientRect();
     audio.currentTime=Math.max(0,Math.min(1,(clientX-r.left)/r.width))*dur();
     sync();
   }
-  bar.addEventListener('click',e=>seekAt(e.clientX));
+  bar.addEventListener('click',e=>seekAt(e.clientX,bar));
+  bpProg.addEventListener('click',e=>seekAt(e.clientX,bpProg));
   bar.addEventListener('keydown',e=>{
     if(e.key==='ArrowRight'){audio.currentTime=Math.min(dur(),audio.currentTime+5);sync();e.preventDefault();}
     else if(e.key==='ArrowLeft'){audio.currentTime=Math.max(0,audio.currentTime-5);sync();e.preventDefault();}
@@ -2199,7 +2263,7 @@ const DOC_TABS=[
 <div class="tagrow"><span class="tag">Cittadinanza Digitale</span><span class="tag">Coding</span><span class="tag">Sicurezza informatica</span><span class="tag">Pensiero computazionale</span><span class="tag">Metacognizione</span><span class="tag">CLIL micro-lessico EN</span></div>`,
 `<h3>Struttura dell’esperienza</h3>
 <ul>
-<li><b>Briefing</b> — <b>presentazione audio</b>: la voce del docente (≈3 min) spiega la missione mentre sette schede si "accendono" sincronizzate col discorso (effetto Zeigarnik: le tappe partono bloccate e si sbloccano al momento giusto). Sostituisce il muro di testo iniziale. Player senza distrazioni; si può saltare col pulsante "Entra in sala".</li>
+<li><b>Briefing</b> — <b>presentazione audio a schermo intero</b>: la voce del docente (≈3 min) spiega la missione; a ogni tappa un <b>popup</b> mostra l’immagine e il testo corrispondente, cambiando in sincrono col discorso (effetto Zeigarnik: le miniature partono bloccate e si accendono al momento giusto). La pagina sta in una sola schermata, senza scroll; le miniature sono cliccabili per riascoltare un passaggio. Si può saltare tutto con "Entra in sala".</li>
 <li><b>Sala Controllo</b> — tre zone: log di navigazione e stato dei nodi (sinistra), planisfero vivo (centro), missioni + terminale (destra).</li>
 <li><b>Manuale</b> — 5 schede (pacchetti, cavi sottomarini, satelliti, ultimo miglio, attacchi e difese), ognuna chiusa da una consegna pratica.</li>
 <li><b>Debriefing</b> — statistiche del turno, chiusura dei loop narrativi, tre domande metacognitive (non salvate: si copiano sul quaderno).</li>
@@ -2246,7 +2310,10 @@ document.getElementById('mtabs').addEventListener('click',e=>{
   const b=e.target.closest('button');if(b)showTab(+b.dataset.tab);
 });
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){modalBg.classList.remove('on');closePopup();closeSigla();}
+  if(e.key==='Escape'){
+    modalBg.classList.remove('on');closePopup();closeSigla();
+    if(window.closeBriefPop) window.closeBriefPop();
+  }
 });
 
 /* ---------- sigla video di apertura ----------

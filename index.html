@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NET CONTROL · La Sala di Controllo di Internet</title>
+<title>Network Operations Center</title>
 <link rel="icon" href="logo.svg">
 <link rel="apple-touch-icon" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -67,14 +67,15 @@ h1,h2,h3,h4{font-family:var(--head)}
 .brand-name{font-family:var(--head);font-size:12.5px;font-weight:700;letter-spacing:.8px;color:var(--cyan2);text-transform:uppercase;white-space:nowrap}
 .brand-role{font-family:var(--head);font-size:10.5px;font-weight:500;letter-spacing:.2px;color:var(--muted);white-space:nowrap}
 .app-title{display:flex;align-items:baseline;gap:10px;margin-left:6px;padding-left:18px;border-left:1px solid var(--edge);min-width:0}
-.app-title .t1{font-family:var(--head);font-weight:800;font-size:19px;letter-spacing:2.5px;color:var(--text);white-space:nowrap}
+.app-title .t1{font-family:var(--head);font-weight:800;font-size:17px;letter-spacing:1.8px;color:var(--text);white-space:nowrap}
 .app-title .t1 b{color:var(--cyan);font-weight:800}
 .app-title .t2{font-family:var(--head);font-weight:500;font-size:12px;color:var(--muted);letter-spacing:.4px;white-space:nowrap}
 .nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.nav{gap:5px}
 .nav button{
-  font-family:var(--head);font-weight:600;font-size:13.5px;letter-spacing:.5px;
+  font-family:var(--head);font-weight:600;font-size:13px;letter-spacing:.4px;
   color:var(--muted);background:transparent;border:1px solid transparent;
-  padding:9px 15px;border-radius:999px;cursor:pointer;transition:.18s;
+  padding:8px 12px;border-radius:999px;cursor:pointer;transition:.18s;
 }
 .nav button:hover{color:var(--text);border-color:var(--edge2)}
 .nav button.on{color:#06121F;background:linear-gradient(180deg,var(--cyan2),var(--cyan));border-color:var(--cyan);font-weight:700}
@@ -118,10 +119,77 @@ h1,h2,h3,h4{font-family:var(--head)}
 .brief-mini h3{font-size:15px;letter-spacing:.4px;margin-bottom:4px}
 .brief-mini p{font-size:14.5px;color:var(--muted);line-height:1.5}
 
-/* ---------- SALA CONTROLLO ---------- */
+/* ---------- BRIEFING AUDIO: player + card sincronizzate ---------- */
+.audio-player{
+  margin-top:26px;display:flex;align-items:center;gap:16px;
+  background:var(--panel);border:1px solid var(--edge2);border-radius:16px;padding:16px 20px;position:relative;overflow:hidden;
+}
+.audio-player::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:linear-gradient(180deg,var(--cyan),var(--gold))}
+.ap-play{
+  flex:none;width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(180deg,var(--cyan2),var(--cyan));display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 28px rgba(65,199,255,.35);transition:.15s;
+}
+.ap-play:hover{transform:scale(1.05)}
+.ap-play:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.ap-play svg{width:24px;height:24px;fill:#06121F}
+.ap-play .ic-pause{display:none}
+.ap-play.playing .ic-play{display:none}
+.ap-play.playing .ic-pause{display:block}
+.ap-mid{flex:1;min-width:0;display:flex;flex-direction:column;gap:9px}
+.ap-label{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;color:var(--cyan2);display:flex;justify-content:space-between;gap:10px}
+.ap-label .ap-time{color:var(--muted)}
+.ap-bar{position:relative;height:8px;border-radius:5px;background:#0A1B31;border:1px solid #12283F;cursor:pointer}
+.ap-fill{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:linear-gradient(90deg,var(--cyanD),var(--cyan));width:0}
+.ap-head{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);left:0;box-shadow:0 0 8px rgba(65,199,255,.7);pointer-events:none}
+.ap-mute{flex:none;width:40px;height:40px;border-radius:10px;background:transparent;border:1px solid var(--edge2);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.ap-mute:hover{color:var(--text);border-color:var(--cyan)}
+.ap-mute svg{width:19px;height:19px}
+.ap-mute .m-off{display:none}
+.ap-mute.muted .m-on{display:none}
+.ap-mute.muted .m-off{display:block}
+
+.sync-hint{margin-top:20px;font-family:var(--mono);font-size:12px;letter-spacing:1.5px;color:var(--faint);text-transform:uppercase;display:flex;align-items:center;gap:10px}
+.sync-hint::before{content:"";width:26px;height:1px;background:var(--faint)}
+.sync-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-top:14px}
+.sync-card{
+  position:relative;background:var(--panel);border:1px solid var(--edge);border-radius:14px;padding:18px 18px 16px;
+  overflow:hidden;transition:border-color .5s, box-shadow .5s, transform .4s;
+}
+.sync-card .sc-n{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--faint)}
+.sync-card .sc-ico{height:44px;margin:8px 0 10px;display:flex;align-items:flex-end}
+.sync-card .sc-ico svg{width:40px;height:40px}
+.sync-card h3{font-size:16px;letter-spacing:.2px;margin-bottom:5px;color:var(--muted);transition:color .5s}
+.sync-card p{font-size:14.5px;line-height:1.5;color:var(--faint);transition:color .5s}
+.sync-card .sc-ico svg *{stroke:var(--faint);transition:stroke .5s}
+.sync-card .sc-ico svg [fill]:not([fill="none"]){fill:var(--faint);stroke:none}
+.sync-card .sc-lock{position:absolute;top:14px;right:14px;width:18px;height:18px;opacity:.6;transition:opacity .4s}
+.sync-card .sc-lock svg{width:18px;height:18px;stroke:var(--faint);fill:none}
+.sync-card .sc-voice{font-family:var(--mono);font-size:10.5px;letter-spacing:1px;color:var(--faint);margin-top:8px;opacity:.9}
+.sync-card.on{border-color:var(--edge2)}
+.sync-card.on h3{color:var(--text)}
+.sync-card.on p{color:#C6D6EE}
+.sync-card.on .sc-ico svg *{stroke:var(--cyan)}
+.sync-card.on .sc-ico svg [fill]:not([fill="none"]){fill:var(--cyan)}
+.sync-card.on .sc-lock{opacity:0}
+.sync-card.on .sc-voice{display:none}
+.sync-card .sc-hidden{opacity:0;filter:blur(4px);transition:opacity .5s, filter .5s;max-height:0;overflow:hidden}
+.sync-card.on .sc-hidden{opacity:1;filter:none;max-height:220px}
+.sync-card.cur{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan), 0 0 26px rgba(65,199,255,.18);transform:translateY(-2px)}
+.sync-card.cur .sc-ico svg *{stroke:var(--gold)}
+.sync-card.cur .sc-ico svg [fill]:not([fill="none"]){fill:var(--gold)}
+.sync-card.cur::after{content:"IN ASCOLTO";position:absolute;top:15px;right:14px;font-family:var(--mono);font-size:8.5px;letter-spacing:1.5px;color:var(--gold)}
+
+/* ---------- SALA CONTROLLO ----------
+   Griglia 2×2: planisfero largo e basso in alto (colonna centrale +
+   ex frame destro), terminale a tutta larghezza in basso — il codice
+   che lo studente scrive è il protagonista. */
 .sala{
-  display:grid;grid-template-columns:288px minmax(0,1fr) 356px;gap:12px;
-  height:calc(100vh - 64px);padding:12px;max-width:1920px;margin:0 auto;
+  display:grid;
+  grid-template-columns:300px minmax(0,1fr);
+  grid-template-rows:auto minmax(0,1fr);
+  grid-template-areas:"left map" "miss term";
+  gap:12px;height:calc(100vh - 64px);padding:12px;max-width:1920px;margin:0 auto;
 }
 .panel{
   background:var(--panel);border:1px solid var(--edge);border-radius:14px;
@@ -136,13 +204,13 @@ h1,h2,h3,h4{font-family:var(--head)}
 }
 .p-head .dotlive{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal);animation:blink 2.2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
-.col-left{display:flex;flex-direction:column;gap:12px;min-height:0}
+.col-left{grid-area:left;display:flex;flex-direction:column;gap:12px;min-height:0}
 .col-left .panel.stato{flex:0 0 auto}
 .col-left .panel.logp{flex:1 1 0;min-height:0}
 
-/* stato rete */
-.net-rows{padding:10px 14px 12px;display:flex;flex-direction:column;gap:7px}
-.nrow{display:grid;grid-template-columns:86px 1fr 40px;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+/* stato rete — compatto su due colonne */
+.net-rows{padding:8px 12px 10px;display:grid;grid-template-columns:1fr 1fr;gap:4px 12px}
+.nrow{display:grid;grid-template-columns:70px 1fr 28px;align-items:center;gap:6px;font-family:var(--mono);font-size:9.5px;color:var(--muted)}
 .nrow .code{letter-spacing:.5px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .nbar{height:6px;border-radius:3px;background:#0A1B31;overflow:hidden;border:1px solid #12283F}
 .nbar i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,var(--cyanD),var(--cyan));transition:width .6s, background .4s}
@@ -164,7 +232,7 @@ h1,h2,h3,h4{font-family:var(--head)}
 .lg.evil .u{color:var(--amber)}
 
 /* centro mappa */
-.col-map{display:flex;flex-direction:column;min-height:0}
+.col-map{grid-area:map;display:flex;flex-direction:column;min-height:0}
 .hud{display:flex;gap:10px;align-items:stretch;margin-bottom:10px;flex:none;flex-wrap:wrap}
 .chip{
   flex:1;min-width:110px;background:var(--panel);border:1px solid var(--edge);border-radius:12px;
@@ -175,7 +243,9 @@ h1,h2,h3,h4{font-family:var(--head)}
 .chip .v small{font-size:11px;color:var(--muted);font-weight:400}
 .chip.gold .v{color:var(--gold)}
 .map-shell{
-  position:relative;flex:1;min-height:0;border:1px solid var(--edge);border-radius:14px;overflow:hidden;
+  position:relative;flex:none;width:100%;aspect-ratio:1000/428;
+  max-height:calc(100vh - 470px);min-height:280px;
+  border:1px solid var(--edge);border-radius:14px;overflow:hidden;
   background:
     radial-gradient(120% 90% at 50% 0%, #0B1E3C 0%, #071428 48%, #050D1C 100%);
 }
@@ -232,9 +302,8 @@ g.city.shielded .city-core{fill:var(--teal)}
 .pk-halo{opacity:.28}
 .trail{fill:none;stroke-linecap:round}
 
-/* colonna destra */
-.col-right{display:flex;flex-direction:column;gap:12px;min-height:0}
-.mission{flex:none}
+/* pannelli bassi: missione + terminale a tutta larghezza */
+.mission{grid-area:miss;overflow:auto;min-height:0}
 .mi-body{padding:13px 16px 15px}
 .mi-step{font-family:var(--mono);font-size:10.5px;letter-spacing:2px;color:var(--gold);margin-bottom:2px}
 .mi-title{font-family:var(--head);font-weight:700;font-size:17px;margin-bottom:4px}
@@ -247,7 +316,7 @@ g.city.shielded .city-core{fill:var(--teal)}
 .mission.flash{animation:miflash .9s ease}
 @keyframes miflash{0%{box-shadow:0 0 0 0 rgba(242,193,78,.7)}100%{box-shadow:0 0 0 22px rgba(242,193,78,0)}}
 
-.term{flex:1;min-height:0}
+.term{grid-area:term;min-height:0}
 .t-out{
   flex:1;min-height:0;overflow-y:auto;padding:10px 14px;font-family:var(--mono);
   font-size:13px;line-height:1.62;scrollbar-width:thin;scrollbar-color:var(--edge2) transparent;
@@ -305,7 +374,7 @@ g.city.shielded .city-core{fill:var(--teal)}
 /* ---------- DEBRIEFING ---------- */
 .deb-wrap{max-width:820px;margin:0 auto;padding:44px 24px 90px}
 .deb-wrap h1{font-size:clamp(26px,3.6vw,38px);font-weight:800;margin:12px 0 10px}
-.deb-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:26px 0}
+.deb-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:26px 0}
 .dstat{background:var(--panel);border:1px solid var(--edge);border-radius:14px;padding:18px;text-align:center}
 .dstat .v{font-family:var(--mono);font-size:34px;font-weight:700;color:var(--cyan2)}
 .dstat .k{font-family:var(--head);font-size:12.5px;letter-spacing:1.2px;color:var(--muted);text-transform:uppercase}
@@ -342,19 +411,117 @@ g.city.shielded .city-core{fill:var(--teal)}
 .mbody .tagrow{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
 .mbody .tag{font-family:var(--head);font-size:12px;font-weight:600;letter-spacing:.4px;color:var(--cyan2);border:1px solid var(--edge2);border-radius:999px;padding:4px 12px}
 
+/* ---------- GAMIFICATION: toast, popup, promo, taccuino, effetti ---------- */
+.toasts{position:absolute;top:12px;right:12px;z-index:6;display:flex;flex-direction:column;gap:8px;align-items:flex-end;pointer-events:none}
+.toast{font-family:var(--mono);font-size:12px;letter-spacing:.6px;color:var(--cyan2);
+  background:rgba(7,18,36,.94);border:1px solid var(--edge2);border-left:3px solid var(--cyan);
+  border-radius:9px;padding:9px 14px;max-width:300px;box-shadow:0 8px 24px rgba(0,0,0,.4);
+  animation:tin .35s cubic-bezier(.2,1.3,.4,1);transition:opacity .5s,transform .5s}
+.toast.gold{color:var(--gold);border-left-color:var(--gold)}
+.toast.warn{color:var(--amber);border-left-color:var(--amber)}
+.toast.out{opacity:0;transform:translateX(20px)}
+@keyframes tin{from{opacity:0;transform:translateX(30px)}to{opacity:1}}
+.p-burst{animation:pburst .6s ease-out forwards}
+@keyframes pburst{to{transform:translate(var(--dx),var(--dy));opacity:0}}
+.p-ring{fill:none;stroke-width:2.2;transform-box:fill-box;transform-origin:center;animation:pring .7s ease-out forwards}
+@keyframes pring{to{transform:scale(3.4);opacity:0}}
+.mi-rank{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10.5px;letter-spacing:1.6px;color:var(--muted);
+  border-bottom:1px solid var(--edge);padding-bottom:9px;margin-bottom:9px}
+.mi-rank b{color:var(--gold);font-weight:700}
+.mi-rank .mi-prog{margin-left:auto;color:var(--faint)}
+.mi-rank svg{flex:none}
+.nb-btn{margin-left:auto;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:1.4px;
+  color:var(--gold);background:rgba(242,193,78,.06);border:1px solid rgba(242,193,78,.4);border-radius:7px;
+  padding:4px 9px;cursor:pointer;transition:.15s}
+.nb-btn:hover{background:rgba(242,193,78,.14)}
+.nb-btn.pulse{animation:nbp .8s ease 2}
+@keyframes nbp{50%{box-shadow:0 0 0 6px rgba(242,193,78,.18)}}
+#btnSnd{display:inline-flex;align-items:center}
+#btnSnd.off .s-on{display:none}
+#btnSnd:not(.off) .s-off{display:none}
+.popup{background:var(--bg2);border:1px solid var(--edge2);border-radius:20px;max-width:560px;width:100%;
+  max-height:88vh;overflow-y:auto;padding:34px 36px;text-align:center;position:relative}
+.promo-k{font-family:var(--mono);font-size:12px;letter-spacing:4px;color:var(--gold)}
+.promo-ins{display:inline-block;margin:18px auto 4px;filter:drop-shadow(0 0 18px rgba(65,199,255,.35));animation:insp 2.4s ease-in-out infinite}
+@keyframes insp{50%{filter:drop-shadow(0 0 30px rgba(242,193,78,.5))}}
+.promo-rank{font-family:var(--head);font-size:30px;font-weight:800;letter-spacing:2px;margin-top:4px}
+.promo-it{font-family:var(--head);font-size:15px;color:var(--muted);margin-bottom:20px}
+.promo-comp{background:rgba(65,199,255,.05);border:1px solid var(--edge);border-radius:14px;padding:16px;margin-bottom:24px}
+.pc-t{font-family:var(--mono);font-size:10px;letter-spacing:2.5px;color:var(--cyan);margin-bottom:10px}
+.badge{display:inline-flex;align-items:center;gap:7px;font-family:var(--head);font-size:14px;font-weight:600;color:var(--text);
+  border:1px solid rgba(46,230,168,.45);background:rgba(46,230,168,.07);border-radius:999px;padding:6px 14px;margin:4px}
+.badge svg{width:14px;height:14px;flex:none}
+.cc-rows{display:flex;flex-direction:column;gap:9px;margin:18px 0 22px}
+.cc-row{display:flex;gap:12px;align-items:center;text-align:left;background:var(--panel);border:1px solid var(--edge);border-radius:12px;padding:9px 14px}
+.cc-row b{font-family:var(--head);font-size:15px;display:block}
+.cc-row span{font-family:var(--head);font-size:12.5px;color:var(--muted)}
+.nb-pop{text-align:left}
+.nb-head{display:flex;align-items:baseline;gap:14px;margin-bottom:16px;flex-wrap:wrap}
+.nb-head h2{font-size:21px}
+.nb-head span{font-family:var(--mono);font-size:12px;color:var(--gold)}
+.nb-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.nb-row{display:grid;grid-template-columns:96px 1fr;gap:12px;background:var(--panel);border:1px solid var(--edge);border-radius:12px;padding:12px 14px}
+.nb-row .nb-cmd{font-family:var(--mono);font-weight:700;font-size:14px;color:var(--cyan)}
+.nb-row p{font-size:14.5px;color:#C6D6EE;margin:3px 0}
+.nb-syn{font-family:var(--mono);font-size:12px;color:var(--cyan2)}
+.nb-ex{font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+.nb-row.lock{opacity:.5}
+.nb-row.lock .nb-cmd{color:var(--faint)}
+.nb-close{display:block;margin:0 auto}
+.dstat .v.rank{font-size:19px;line-height:2.1;letter-spacing:1px}
+.deb-comp{margin:-8px 0 26px}
+.deb-comp .pc-t{margin-bottom:6px}
+
+/* ---------- SIGLA VIDEO ---------- */
+.sigla{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;
+  background:radial-gradient(120% 100% at 50% 0%,#0A1B36,#040A16 70%);transition:opacity .6s}
+.sigla.out{opacity:0;pointer-events:none}
+.sigla-box{width:min(940px,94vw);text-align:center}
+.sigla-k{font-family:var(--mono);font-size:12px;letter-spacing:4px;color:var(--cyan);margin-bottom:14px}
+.sigla-frame{position:relative;width:100%;aspect-ratio:16/9;background:#000;border:1px solid var(--edge2);
+  border-radius:16px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.sigla-frame iframe{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.sigla-shield{position:absolute;inset:0;z-index:2;cursor:pointer}
+.sigla-cover{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;gap:16px;align-items:center;justify-content:center;
+  background:radial-gradient(80% 80% at 50% 45%, rgba(18,62,144,.35), rgba(4,10,22,.94));cursor:pointer;transition:opacity .4s}
+.sigla-cover.off{opacity:0;pointer-events:none}
+.sigla-cover .play{width:86px;height:86px;border-radius:50%;background:linear-gradient(180deg,var(--cyan2),var(--cyan));
+  display:flex;align-items:center;justify-content:center;box-shadow:0 0 44px rgba(65,199,255,.45)}
+.sigla-cover .play svg{width:34px;height:34px;margin-left:5px}
+.sigla-cover span{font-family:var(--head);font-weight:600;color:var(--text);font-size:16px}
+.sigla-skip{margin-top:16px;font-family:var(--head);font-weight:600;font-size:14px;color:var(--muted);
+  background:transparent;border:1px solid var(--edge2);border-radius:999px;padding:9px 20px;cursor:pointer;transition:.15s}
+.sigla-skip:hover{color:var(--text);border-color:var(--cyan)}
+
+/* ---------- PROFILO UTENTE NEL LOG ---------- */
+.log-profile{display:none;border-bottom:1px solid var(--edge);padding:10px 12px;flex:none;background:rgba(65,199,255,.04)}
+.lp-top{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.lp-top svg{width:26px;height:26px;flex:none}
+.lp-top .lp-id b{font-family:var(--mono);font-size:13px;color:var(--cyan2);display:block}
+.lp-top .lp-id span{font-family:var(--head);font-size:11.5px;color:var(--muted);display:block}
+.lp-off{margin-left:auto;font-family:var(--mono);font-size:9.5px;letter-spacing:1px;color:var(--muted);
+  background:transparent;border:1px solid var(--edge2);border-radius:6px;padding:4px 8px;cursor:pointer}
+.lp-off:hover{color:var(--amber);border-color:var(--amber)}
+.lp-rows{display:flex;flex-direction:column;gap:4px}
+.lp-rows>div{display:flex;justify-content:space-between;gap:8px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.lp-rows b{color:var(--text);font-weight:500;text-align:right}
+.lp-rows .th b{color:var(--amber)}
+.lg .u{cursor:pointer;border-bottom:1px dotted rgba(143,227,255,.5)}
+.lg .u:hover{color:#fff}
+
 /* ---------- RESPONSIVE ---------- */
 @media (max-width:1180px){
-  .sala{grid-template-columns:250px minmax(0,1fr) 320px}
+  .sala{grid-template-columns:260px minmax(0,1fr)}
 }
 @media (max-width:980px){
   .topbar{height:auto;min-height:64px;flex-wrap:wrap;padding:10px 14px;row-gap:6px}
   .nav{margin-left:0;width:100%;justify-content:flex-start}
   .sala{display:flex;flex-direction:column;height:auto;min-height:calc(100vh - 64px)}
-  .col-map{order:1;min-height:60vh}
-  .map-shell{min-height:52vh}
-  .col-right{order:2}
-  .term{min-height:340px}
-  .col-left{order:3}
+  .col-map{order:1}
+  .map-shell{max-height:none;min-height:0}
+  .mission{order:2}
+  .term{order:3;min-height:340px;display:flex}
+  .col-left{order:4}
   .logp{min-height:260px}
   .brief-grid{grid-template-columns:1fr}
   .deb-stats{grid-template-columns:1fr}
@@ -368,6 +535,24 @@ g.city.shielded .city-core{fill:var(--teal)}
 </head>
 <body>
 
+<!-- ================= SIGLA VIDEO ================= -->
+<div class="sigla" id="siglaBg">
+  <div class="sigla-box">
+    <div class="sigla-k">NETWORK OPERATIONS CENTER · SIGLA DI APERTURA</div>
+    <div class="sigla-frame">
+      <div id="ytSigla"></div>
+      <div class="sigla-shield" id="siglaShield" aria-hidden="true"></div>
+      <div class="sigla-cover" id="siglaCover" role="button" tabindex="0" aria-label="Avvia la sigla">
+        <div class="play">
+          <svg viewBox="0 0 24 24" fill="#06121F" aria-hidden="true"><path d="M7 4.5v15l13-7.5-13-7.5z"/></svg>
+        </div>
+        <span>Avvia la sigla</span>
+      </div>
+    </div>
+    <button class="sigla-skip" id="siglaSkip">Salta la sigla e vai in sala controllo ›</button>
+  </div>
+</div>
+
 <!-- ================= TOPBAR ================= -->
 <header class="topbar">
   <div class="brand-txt">
@@ -375,14 +560,20 @@ g.city.shielded .city-core{fill:var(--teal)}
     <span class="brand-role">Animatore Digitale · Andrea Cerioli</span>
   </div>
   <div class="app-title">
-    <span class="t1">NET<b>CONTROL</b></span>
-    <span class="t2">La Sala di Controllo di Internet</span>
+    <span class="t1">NETWORK <b>OPERATIONS</b> CENTER</span>
   </div>
   <nav class="nav" id="nav">
     <button data-go="briefing" class="on">Briefing</button>
     <button data-go="sala">Sala Controllo</button>
     <button data-go="manuale">Manuale</button>
     <button data-go="debrief">Debriefing</button>
+    <button class="doc" id="btnSnd" aria-label="Attiva o disattiva i suoni" title="Suoni">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 9v6h4l5 4V5L8 9H4z"/>
+        <path class="s-on" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/>
+        <path class="s-off" d="M17 9.5l5 5M22 9.5l-5 5"/>
+      </svg>
+    </button>
     <button class="doc" id="btnDoc">Info Docenti</button>
   </nav>
 </header>
@@ -390,37 +581,101 @@ g.city.shielded .city-core{fill:var(--teal)}
 <!-- ================= BRIEFING ================= -->
 <section class="screen on" id="scr-briefing">
   <div class="brief-wrap">
-    <div class="kicker">Missione · Traffico dati</div>
-    <h1>In questo momento, un messaggio sta attraversando <em>l'oceano</em>. Come fa?</h1>
-    <p class="lead">Benvenuto nella sala di controllo di Internet. Da qui si vede quello che nessuno vede mai: il viaggio dei dati intorno al mondo.</p>
+    <div class="kicker">Briefing · La voce del capo turno</div>
+    <h1>Prima di entrare, <em>ascolta</em> la missione.</h1>
+    <p class="lead">Tre minuti per capire dove stai per mettere le mani. Premi play: le schede qui sotto si accendono man mano che la voce le racconta.</p>
 
-    <div class="brief-card">
-      <p>Quando invii una foto a un amico, la foto non "vola" nell'aria fino a lui. Viene divisa in tanti pezzetti, i <b>pacchetti</b>, e ogni pacchetto parte per un viaggio vero: scende nei <b>cavi sotto il mare</b>, corre nella fibra ottica alla velocità della luce, rimbalza tra <b>antenne e ripetitori</b>, e a volte sale fino a un <b>satellite</b> a 36.000 chilometri da qui.</p>
-      <p>Oggi la sala di controllo è tua. La guiderai <span class="voice">scrivendo comandi in inglese</span>, come fanno i tecnici veri: <span class="cmd-inline">SEND</span> per spedire un pacchetto, <span class="cmd-inline">PING</span> per misurare le distanze, <span class="cmd-inline">TRACE</span> per seguire il viaggio di un utente.</p>
-      <p>Un'ultima cosa. Mentre preparavamo questa missione, gli strumenti hanno registrato <b>un'attività strana</b> nella rete. Qualcosa, da qualche parte, si sta muovendo. Non sappiamo ancora che cos'è: per ora mettiamo da parte la domanda. Ma tieni gli occhi aperti. <span class="voice">Ci torneremo.</span></p>
+    <!-- player audio senza distrazioni -->
+    <div class="audio-player" id="audioPlayer">
+      <button class="ap-play" id="apPlay" aria-label="Riproduci il briefing">
+        <svg class="ic-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5-13-7.5z"/></svg>
+        <svg class="ic-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+      </button>
+      <div class="ap-mid">
+        <div class="ap-label"><span>BRIEFING AUDIO · Andrea Cerioli</span><span class="ap-time"><span id="apCur">0:00</span> / <span id="apDur">3:20</span></span></div>
+        <div class="ap-bar" id="apBar" role="slider" aria-label="Avanzamento audio" tabindex="0">
+          <div class="ap-fill" id="apFill"></div>
+          <div class="ap-head" id="apHead"></div>
+        </div>
+      </div>
+      <button class="ap-mute" id="apMute" aria-label="Disattiva l'audio">
+        <svg class="m-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>
+        <svg class="m-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 9.5l5 5M22 9.5l-5 5"/></svg>
+      </button>
+      <audio id="brAudio" preload="metadata" src="discorso.mp3"></audio>
+    </div>
+
+    <div class="sync-hint">Le tappe del briefing</div>
+    <div class="sync-grid" id="syncGrid">
+
+      <div class="sync-card on" data-t="0">
+        <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+        <div class="sc-n">01</div>
+        <div class="sc-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3.5 12h17M12 3.2c2.4 2.3 3.8 5.5 3.8 8.8s-1.4 6.5-3.8 8.8c-2.4-2.3-3.8-5.5-3.8-8.8S9.6 5.5 12 3.2z"/></svg></div>
+        <h3>La domanda</h3>
+        <p class="sc-hidden">In questo momento un messaggio sta attraversando l'oceano. Come fa ad arrivare dall'altra parte del mondo?</p>
+        <div class="sc-voice">▸ lo racconta la voce</div>
+      </div>
+
+      <div class="sync-card" data-t="27">
+        <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+        <div class="sc-n">02</div>
+        <div class="sc-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 10.5c2-2.5 8-2.5 10 0" opacity=".7"/><circle cx="7" cy="10.5" r=".8" fill="currentColor" stroke="none"/><circle cx="17" cy="10.5" r=".8" fill="currentColor" stroke="none"/></svg></div>
+        <h3>La sala di controllo</h3>
+        <p class="sc-hidden">Entri in una sala di controllo vera: un planisfero vivo con cavi sotto il mare, satelliti e antenne.</p>
+        <div class="sc-voice">▸ lo racconta la voce</div>
+      </div>
+
+      <div class="sync-card" data-t="54">
+        <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+        <div class="sc-n">03</div>
+        <div class="sc-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg></div>
+        <h3>Si comanda scrivendo</h3>
+        <p class="sc-hidden">Niente mouse: comandi in inglese, come i professionisti. SEND, PING, TRACE… e HELP se ti serve aiuto.</p>
+        <div class="sc-voice">▸ lo racconta la voce</div>
+      </div>
+
+      <div class="sync-card" data-t="90">
+        <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+        <div class="sc-n">04</div>
+        <div class="sc-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9.5C7.5 20 4 17 4 12V6z"/><path d="M8.5 12.5l2 2 4.5-5" /></svg></div>
+        <h3>La carriera</h3>
+        <p class="sc-hidden">Si parte da Recluta. Quattro livelli, cinque missioni ciascuno. In cima: Cyber Guardian.</p>
+        <div class="sc-voice">▸ lo racconta la voce</div>
+      </div>
+
+      <div class="sync-card" data-t="114">
+        <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+        <div class="sc-n">05</div>
+        <div class="sc-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.8"/></svg></div>
+        <h3>Perché lo fai</h3>
+        <p class="sc-hidden">Internet lo usi ogni giorno, ma nessuno te lo fa vedere. Oggi lo vedi — e scopri quanto racconta la rete.</p>
+        <div class="sc-voice">▸ lo racconta la voce</div>
+      </div>
+
+      <div class="sync-card" data-t="146">
+        <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+        <div class="sc-n">06</div>
+        <div class="sc-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5 2.5 20.5h19L12 3.5z"/><path d="M12 10v4.5"/><circle cx="12" cy="17.6" r=".5" fill="currentColor" stroke="none"/></svg></div>
+        <h3>L'attività strana</h3>
+        <p class="sc-hidden">Gli strumenti hanno registrato qualcosa di anomalo nella rete. A un certo punto si farà viva…</p>
+        <div class="sc-voice">▸ lo racconta la voce</div>
+      </div>
+
+      <div class="sync-card" data-t="180">
+        <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+        <div class="sc-n">07</div>
+        <div class="sc-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M13 9l3 3-3 3"/></svg></div>
+        <h3>Benvenuto in sala</h3>
+        <p class="sc-hidden">La domanda dell'inizio non avrà più segreti. Scrivi HELP… e benvenuto in sala controllo.</p>
+        <div class="sc-voice">▸ lo racconta la voce</div>
+      </div>
+
     </div>
 
     <div class="start-row">
       <button class="btn-gold" id="btnStart">Entra in sala controllo</button>
       <span class="start-note" id="startNote">Le missioni ti aspettano. La prima è già sul monitor.</span>
-    </div>
-
-    <div class="brief-grid">
-      <div class="brief-mini">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#41C7FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17c4-7 14-7 18 0"/><circle cx="3" cy="17" r="1.6" fill="#41C7FF" stroke="none"/><circle cx="21" cy="17" r="1.6" fill="#41C7FF" stroke="none"/><path d="M8 14.2c.5-.9 1.2-1.7 2-2.2M14 12c1.5.4 2.9 1.4 4 3" opacity=".45"/></svg>
-        <h3>Cavi sottomarini</h3>
-        <p>Quasi tutto il traffico tra i continenti passa in cavi posati sul fondo degli oceani.</p>
-      </div>
-      <div class="brief-mini">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#41C7FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9.5" y="9" width="5" height="6" rx="1"/><path d="M3.5 10.5h4M16.5 10.5h4M3.5 13.5h4M16.5 13.5h4"/><path d="M12 15v3M9 20h6" opacity=".5"/><path d="M12 9V6.5M10.6 5h2.8" opacity=".5"/></svg>
-        <h3>Satelliti</h3>
-        <p>Servono dove i cavi non arrivano. Ma 36.000 km sono tanti: il segnale ci mette di più.</p>
-      </div>
-      <div class="brief-mini">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#41C7FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V9M8.5 21h7"/><path d="M12 9l-2.5-4h5L12 9z"/><path d="M7.5 7.5a6.4 6.4 0 0 1 9 0" opacity=".55"/><path d="M5.5 5.2a9.4 9.4 0 0 1 13 0" opacity=".3"/></svg>
-        <h3>Antenne e ripetitori</h3>
-        <p>L'ultimo tratto del viaggio: dal cavo alla tua casa, di antenna in antenna.</p>
-      </div>
     </div>
   </div>
 </section>
@@ -437,8 +692,9 @@ g.city.shielded .city-core{fill:var(--teal)}
       </div>
       <div class="panel logp">
         <div class="p-head"><span class="dotlive"></span>LOG NAVIGAZIONE UTENTI</div>
+        <div class="log-profile" id="logProfile"></div>
         <div class="log-feed" id="logFeed">
-          <div class="log-off">Registro spento.<br>Digita <b>LOG ON</b> nel terminale per vedere chi sta navigando adesso.</div>
+          <div class="log-off">Registro spento.<br>Digita <b>LOG ON</b> nel terminale per vedere chi sta navigando adesso.<br><br>Poi tocca un nome (o usa <b>FILTER nome</b>) per seguire una sola persona, e <b>WHOIS nome</b> per la sua carta d'identità di rete.</div>
         </div>
       </div>
     </div>
@@ -456,7 +712,8 @@ g.city.shielded .city-core{fill:var(--teal)}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3 2.5 20h19L12 3z"/><path d="M12 10v4.5"/><circle cx="12" cy="17.4" r=".4" fill="currentColor"/></svg>
           <span id="alertTxt">ALERT</span>
         </div>
-        <svg id="mapsvg" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mappa del mondo con il traffico dati in tempo reale"></svg>
+        <div class="toasts" id="toasts"></div>
+        <svg id="mapsvg" viewBox="0 0 1000 428" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mappa del mondo con il traffico dati in tempo reale"></svg>
         <div class="route-flag">ROUTE: <b id="routeMode">CABLE</b></div>
         <div class="fw-flag" id="fwFlag">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3z"/></svg>
@@ -465,12 +722,12 @@ g.city.shielded .city-core{fill:var(--teal)}
       </div>
     </div>
 
-    <!-- colonna destra -->
-    <div class="col-right">
-      <div class="panel mission" id="missionCard">
-        <div class="p-head">MISSIONE CORRENTE</div>
+    <!-- pannelli bassi: carriera + terminale -->
+    <div class="panel mission" id="missionCard">
+        <div class="p-head">CARRIERA · MISSIONE CORRENTE</div>
         <div class="mi-body">
-          <div class="mi-step" id="miStep">MISSIONE 1 / 6</div>
+          <div class="mi-rank"><span id="rankIns"></span>GRADO: <b id="rankName">RECLUTA</b><span class="mi-prog" id="miProg"></span></div>
+          <div class="mi-step" id="miStep">LIVELLO 1</div>
           <div class="mi-title" id="miTitle"></div>
           <div class="mi-goal" id="miGoal"></div>
           <div class="mi-hint" id="miHint"></div>
@@ -478,7 +735,7 @@ g.city.shielded .city-core{fill:var(--teal)}
         </div>
       </div>
       <div class="panel term">
-        <div class="p-head"><span class="dotlive"></span>TERMINALE DI COMANDO</div>
+        <div class="p-head"><span class="dotlive"></span>TERMINALE DI COMANDO<button class="nb-btn" id="btnNb">TACCUINO <b id="nbCount">0/0</b></button></div>
         <div class="t-out" id="tout"></div>
         <div class="t-in">
           <span class="ps1">›</span>
@@ -489,7 +746,6 @@ g.city.shielded .city-core{fill:var(--teal)}
           <span>COMANDI RAPIDI · clicca per inserire</span>
         </div>
       </div>
-    </div>
 
   </div>
 </section>
@@ -626,10 +882,12 @@ g.city.shielded .city-core{fill:var(--teal)}
     <h1>Il tuo turno in sala controllo</h1>
 
     <div class="deb-stats">
+      <div class="dstat g"><div class="v rank" id="dbRank">RECLUTA</div><div class="k">Grado raggiunto</div></div>
       <div class="dstat"><div class="v" id="dbPk">0</div><div class="k">Pacchetti inviati</div></div>
-      <div class="dstat"><div class="v" id="dbMi">0/6</div><div class="k">Missioni completate</div></div>
+      <div class="dstat"><div class="v" id="dbMi">0/20</div><div class="k">Missioni completate</div></div>
       <div class="dstat g"><div class="v" id="dbThr">0</div><div class="k">Minacce bloccate</div></div>
     </div>
+    <div class="deb-comp" id="debComp"></div>
 
     <div class="deb-close">
       <p>Ricordi la domanda dell'inizio? <b>"Come fa un messaggio ad attraversare l'oceano?"</b> Ora lo sai per averlo visto: si divide in pacchetti, scende nei cavi sotto il mare, e quando serve sale fino ai satelliti.</p>
@@ -652,11 +910,16 @@ g.city.shielded .city-core{fill:var(--teal)}
   </div>
 </section>
 
+<!-- ================= POPUP (promozioni, taccuino, carriera) ================= -->
+<div class="modal-bg" id="popupBg">
+  <div class="popup" id="popupBox" role="dialog" aria-modal="true"></div>
+</div>
+
 <!-- ================= MODAL DOCENTI ================= -->
 <div class="modal-bg" id="modalBg">
   <div class="modal" role="dialog" aria-modal="true" aria-label="Informazioni per i docenti">
     <div class="modal-h">
-      <h2>Info Docenti · NET CONTROL</h2>
+      <h2>Info Docenti · Network Operations Center</h2>
       <button class="x" id="btnDocX" aria-label="Chiudi"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
     <div class="mtabs" id="mtabs">
@@ -687,6 +950,7 @@ function go(name){
     setTimeout(()=>document.getElementById('cmd').focus({preventScroll:true}),80);
   }
   if(name==='debrief'){ refreshDebrief(); }
+  if(name!=='briefing'){ const a=document.getElementById('brAudio'); if(a&&!a.paused) a.pause(); }
   window.scrollTo(0,0);
 }
 document.getElementById('nav').addEventListener('click',e=>{
@@ -694,10 +958,68 @@ document.getElementById('nav').addEventListener('click',e=>{
 });
 document.getElementById('btnStart').addEventListener('click',()=>go('sala'));
 
-/* ---------- dati geografici ---------- */
-const W=1000,H=560, MAP_TOP=78, MAP_H=462;
+/* ---------- briefing audio: player custom + card sincronizzate ---------- */
+(function(){
+  const audio=document.getElementById('brAudio');
+  const play=document.getElementById('apPlay');
+  const mute=document.getElementById('apMute');
+  const bar=document.getElementById('apBar');
+  const fill=document.getElementById('apFill');
+  const head=document.getElementById('apHead');
+  const curT=document.getElementById('apCur');
+  const durT=document.getElementById('apDur');
+  const cards=[...document.querySelectorAll('#syncGrid .sync-card')];
+  if(!audio) return;
+  function fmt(s){s=Math.max(0,Math.floor(s||0));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
+  function dur(){return isFinite(audio.duration)&&audio.duration>0?audio.duration:200}
+  play.addEventListener('click',()=>{ audio.paused?audio.play():audio.pause(); });
+  audio.addEventListener('play',()=>play.classList.add('playing'));
+  audio.addEventListener('pause',()=>play.classList.remove('playing'));
+  audio.addEventListener('loadedmetadata',()=>{ durT.textContent=fmt(audio.duration); });
+  let curCard=-1;
+  function sync(){
+    const t=audio.currentTime, d=dur(), pct=Math.min(100,t/d*100);
+    fill.style.width=pct+'%'; head.style.left=pct+'%';
+    curT.textContent=fmt(t);
+    let idx=-1;
+    cards.forEach((c,i)=>{
+      const ct=parseFloat(c.dataset.t);
+      if(t>=ct-0.25){ c.classList.add('on'); idx=i; }
+    });
+    if(idx!==curCard){
+      cards.forEach((c,i)=>c.classList.toggle('cur', i===idx));
+      curCard=idx;
+      if(idx>=0 && document.getElementById('scr-briefing').classList.contains('on')){
+        cards[idx].scrollIntoView({behavior:'smooth',block:'nearest'});
+      }
+    }
+  }
+  audio.addEventListener('timeupdate',sync);
+  audio.addEventListener('ended',()=>{
+    play.classList.remove('playing');
+    cards.forEach(c=>{c.classList.add('on');c.classList.remove('cur')});
+    curCard=-1;
+    document.getElementById('startNote').textContent='Briefing concluso: entra in sala e scrivi HELP per cominciare.';
+  });
+  mute.addEventListener('click',()=>{ audio.muted=!audio.muted; mute.classList.toggle('muted',audio.muted); });
+  function seekAt(clientX){
+    const r=bar.getBoundingClientRect();
+    audio.currentTime=Math.max(0,Math.min(1,(clientX-r.left)/r.width))*dur();
+    sync();
+  }
+  bar.addEventListener('click',e=>seekAt(e.clientX));
+  bar.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'){audio.currentTime=Math.min(dur(),audio.currentTime+5);sync();e.preventDefault();}
+    else if(e.key==='ArrowLeft'){audio.currentTime=Math.max(0,audio.currentTime-5);sync();e.preventDefault();}
+  });
+})();
+
+/* ---------- dati geografici ----------
+   viewBox compatto: niente fasce vuote sopra/sotto i continenti.
+   Latitudine 78 (nord) → -52 (sud). */
+const W=1000,H=428, MAP_TOP=56, MAP_H=352, LAT_TOP=78, LAT_SPAN=130;
 function px(lon){return 10+(lon+180)/360*980}
-function py(lat){return MAP_TOP+(85-lat)/145*MAP_H}
+function py(lat){return MAP_TOP+(LAT_TOP-lat)/LAT_SPAN*MAP_H}
 function havKm(a,b){
   const R=6371,d=Math.PI/180;
   const la1=a.lat*d,la2=b.lat*d,dla=(b.lat-a.lat)*d,dlo=(b.lon-a.lon)*d;
@@ -708,6 +1030,7 @@ function havKm(a,b){
 const CITIES={
   MILANO:{n:'Milano',lon:9.2,lat:45.5,dy:-10},
   LONDRA:{n:'Londra',lon:-0.1,lat:51.5,dy:-10},
+  MOSCA:{n:'Mosca',lon:37.6,lat:55.75,dy:-10},
   NEWYORK:{n:'New York',lon:-74,lat:40.7,dy:-10},
   LOSANGELES:{n:'Los Angeles',lon:-118.2,lat:34,dy:-10},
   SANPAOLO:{n:'San Paolo',lon:-46.6,lat:-23.5,dy:16},
@@ -720,12 +1043,15 @@ const CITIES={
   SYDNEY:{n:'Sydney',lon:151.2,lat:-33.9,dy:16}
 };
 const CITY_ALIAS={'NEW':'NEWYORK','YORK':'NEWYORK','NY':'NEWYORK','LA':'LOSANGELES','LOS':'LOSANGELES',
-  'SAN':'SANPAOLO','SAO':'SANPAOLO','SAOPAULO':'SANPAOLO','ILCAIRO':'CAIRO','JOBURG':'JOHANNESBURG','JHB':'JOHANNESBURG'};
+  'SAN':'SANPAOLO','SAO':'SANPAOLO','SAOPAULO':'SANPAOLO','ILCAIRO':'CAIRO','JOBURG':'JOHANNESBURG','JHB':'JOHANNESBURG',
+  'MOSCOW':'MOSCA','MOSCU':'MOSCA'};
 
 /* [a, b, tipo, curvatura] — curvatura: offset perpendicolare in px */
 const LINKS=[
   ['LONDRA','NEWYORK','sub',-46],
   ['MILANO','LONDRA','land',-8],
+  ['MILANO','MOSCA','land',-6],
+  ['MOSCA','TOKYO','land',-36],
   ['NEWYORK','LOSANGELES','land',-16],
   ['NEWYORK','SANPAOLO','sub',-42],
   ['SANPAOLO','LAGOS','sub',34],
@@ -792,7 +1118,7 @@ const gGrat=el('g',{},svg), gDots=el('g',{},svg), gLinks=el('g',{},svg),
   let d='';
   for(let gx=12;gx<=988;gx+=step){
     for(let gy=MAP_TOP+4;gy<=MAP_TOP+MAP_H-4;gy+=step){
-      const lon=(gx-10)/980*360-180, lat=85-(gy-MAP_TOP)/MAP_H*145;
+      const lon=(gx-10)/980*360-180, lat=LAT_TOP-(gy-MAP_TOP)/MAP_H*LAT_SPAN;
       for(let i=0;i<LANDS.length;i++){
         if(inPoly(lon,lat,LANDS[i])){
           d+='M'+gx+' '+gy+'m-1.7 0a1.7 1.7 0 1 0 3.4 0a1.7 1.7 0 1 0 -3.4 0';
@@ -806,7 +1132,7 @@ const gGrat=el('g',{},svg), gDots=el('g',{},svg), gLinks=el('g',{},svg),
 
 /* satelliti geostazionari */
 const SATS=[{id:'SAT-1',x:255},{id:'SAT-2',x:520},{id:'SAT-3',x:790}];
-const SAT_Y=40;
+const SAT_Y=28;
 (function(){
   el('line',{x1:30,y1:SAT_Y,x2:970,y2:SAT_Y,class:'orbit'},gSat);
   const t=el('text',{x:968,y:SAT_Y+18,'text-anchor':'end',class:'orbit-lbl'},gSat);
@@ -1028,6 +1354,7 @@ function renderLoads(){
 setInterval(()=>{
   Object.keys(loads).forEach(c=>{
     if(attack.active && c===attack.target) return;
+    if(congestion.active && c===congestion.target) return;
     loads[c]=Math.max(12,Math.min(68,loads[c]+(Math.random()*10-5)));
   });
   renderLoads();
@@ -1046,9 +1373,59 @@ const ACTIONS=[
   ['legge le notizie','news.site',()=> (150+Math.random()*500|0)+' kB'],
   ['carica i compiti','school.cloud',()=> (0.3+Math.random()*2).toFixed(1)+' MB']
 ];
-let logOn=false;
+let logOn=false, logFilter=null;
 const lastRoute={}; /* user → {src,dst} */
 const logFeed=document.getElementById('logFeed');
+
+/* profili fittizi: device, browser, tempo online, minacce */
+const DEVICES=[
+  ['iPad (10ª gen)','Safari','tablet'],
+  ['iPhone','Safari','phone'],
+  ['PC Windows','Edge','pc'],
+  ['MacBook Air','Safari','pc'],
+  ['tablet Android','Chrome','tablet'],
+  ['PC Windows','Chrome','pc'],
+  ['smartphone Android','Chrome','phone'],
+  ['iMac','Safari','pc']
+];
+const THREAT_TYPES=['richiesta di tracciamento','tentativo di phishing','pop-up ingannevole','richiesta di posizione sospetta'];
+const profiles={};
+function profileOf(u){
+  if(!profiles[u]){
+    const d=DEVICES[Math.floor(Math.random()*DEVICES.length)];
+    const codes=Object.keys(CITIES);
+    profiles[u]={
+      device:d[0],browser:d[1],kind:d[2],
+      home:codes[Math.floor(Math.random()*codes.length)],
+      since:performance.now()-(3+Math.random()*40)*60000,
+      mb:2+Math.random()*30,
+      threats:Math.floor(Math.random()*3)
+    };
+  }
+  return profiles[u];
+}
+function onlineMin(p){return Math.max(1,Math.round((performance.now()-p.since)/60000))}
+function devIcon(kind){
+  if(kind==='phone') return '<svg viewBox="0 0 24 24" fill="none" stroke="#41C7FF" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><rect x="8" y="3" width="8" height="18" rx="2"/><path d="M11 18.5h2"/></svg>';
+  if(kind==='tablet') return '<svg viewBox="0 0 24 24" fill="none" stroke="#41C7FF" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2.4"/><path d="M10.5 18.5h3"/></svg>';
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="#41C7FF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="11" rx="1.6"/><path d="M2.5 19h19"/></svg>';
+}
+function renderLogProfile(){
+  const box=document.getElementById('logProfile');
+  if(!logFilter){box.innerHTML='';box.style.display='none';return}
+  const p=profileOf(logFilter);
+  box.style.display='block';
+  box.innerHTML='<div class="lp-top">'+devIcon(p.kind)
+    +'<div class="lp-id"><b>'+logFilter+'</b><span>si collega da '+CITIES[p.home].n+'</span></div>'
+    +'<button class="lp-off" onclick="runCmd(\'FILTER OFF\')">FILTER OFF</button></div>'
+    +'<div class="lp-rows">'
+    +'<div><span>dispositivo</span><b>'+p.device+'</b></div>'
+    +'<div><span>browser</span><b>'+p.browser+'</b></div>'
+    +'<div><span>online da</span><b>'+onlineMin(p)+' min</b></div>'
+    +'<div><span>dati scambiati</span><b>'+p.mb.toFixed(1)+' MB</b></div>'
+    +'<div class="'+(p.threats?'th':'')+'"><span>minacce bloccate</span><b>'+p.threats+'</b></div>'
+    +'</div>';
+}
 function fmtTime(){
   const d=new Date();
   return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0');
@@ -1061,71 +1438,392 @@ function pushLog(html,cls){
 }
 function logTick(){
   if(!logOn||document.hidden) return;
-  const u=USERS[Math.floor(Math.random()*USERS.length)];
+  /* col filtro attivo, l'utente osservato compare più spesso */
+  const u=(logFilter&&Math.random()<.65)? logFilter : USERS[Math.floor(Math.random()*USERS.length)];
+  const p=profileOf(u);
+  /* ogni tanto l'utente filtrato riceve una minaccia (bloccata dalla rete) */
+  if(logFilter && u===logFilter && Math.random()<.18){
+    p.threats++;
+    const th=THREAT_TYPES[Math.floor(Math.random()*THREAT_TYPES.length)];
+    pushLog('<span class="t">'+fmtTime()+'</span> · <span class="u">'+u+'</span> <span class="ac">minaccia in arrivo</span><br><span class="rt">'+th+'</span> · <span class="kb">bloccata dalla rete</span>','evil');
+    renderLogProfile();
+    return;
+  }
   const codes=Object.keys(CITIES);
-  const src=codes[Math.floor(Math.random()*codes.length)];
+  const src=p.home;
   let dst=codes[Math.floor(Math.random()*codes.length)];
   if(dst===src) dst=codes[(codes.indexOf(src)+3)%codes.length];
   const A=ACTIONS[Math.floor(Math.random()*ACTIONS.length)];
   lastRoute[u]={src,dst,action:A[0],host:A[1]};
-  pushLog('<span class="t">'+fmtTime()+'</span> · <span class="u">'+u+'</span> <span class="ac">'+A[0]+'</span><br><span class="rt">'+src+' → '+dst+'</span> · <span class="kb">'+A[1]+' · '+A[2]()+'</span>');
+  p.mb+=.2+Math.random()*3;
+  if(!logFilter || u===logFilter){
+    pushLog('<span class="t">'+fmtTime()+'</span> · <span class="u">'+u+'</span> <span class="ac">'+A[0]+'</span><br><span class="rt">'+src+' → '+dst+'</span> · <span class="kb">'+A[1]+' · '+A[2]()+'</span>');
+  }
+  if(logFilter===u) renderLogProfile();
 }
 setInterval(logTick, 2100);
+/* tocca un nome nel log per filtrarlo */
+logFeed.addEventListener('click',e=>{
+  const u=e.target.closest('.u'); if(!u) return;
+  runCmd('FILTER '+u.textContent);
+});
+/* ricerca fuzzy di un utente nel registro */
+function findUser(who){
+  who=(who||'').toLowerCase();
+  const keys=Object.keys(lastRoute);
+  return keys.find(k=>k.toLowerCase()===who) || keys.find(k=>k.toLowerCase().includes(who)&&who.length>1) || null;
+}
 
-/* ---------- missioni ---------- */
-const MISSIONS=[
-  {title:'Primo invio',goal:'Spedisci un pacchetto da Milano a New York e osserva la strada che sceglie.',hint:'SEND MILANO NEWYORK',
-   check:e=>e.type==='send'&&e.src==='MILANO'&&e.dst==='NEWYORK'&&e.via==='CABLE'},
-  {title:'La via del cielo',goal:'Cambia strada: passa ai satelliti e rispedisci un pacchetto. Il tempo cambierà.',hint:'ROUTE SAT · poi SEND MILANO NEWYORK',
-   check:e=>e.type==='send'&&e.via==='SAT'},
-  {title:'Misura l’oceano',goal:'Torna ai cavi e misura quanto ci mette un segnale ad arrivare a Sydney.',hint:'ROUTE CABLE · poi PING SYDNEY',
-   check:e=>e.type==='ping'&&e.dst==='SYDNEY'},
-  {title:'Occhi sulla rete',goal:'Accendi il registro di navigazione e segui il viaggio di un utente vero (beh, quasi).',hint:'LOG ON · poi TRACE nome_utente',
-   check:e=>e.type==='trace'},
-  {title:'Allarme intrusione',goal:'Un nodo è sotto attacco DDoS. Trova le sorgenti e bloccale una per una.',hint:'SCAN · poi BLOCK indirizzo_ip',
-   check:e=>e.type==='allblocked'},
-  {title:'Scudo alzato',goal:'Gli attaccanti sono fermi. Ora rendi la difesa permanente.',hint:'FIREWALL ON',
-   check:e=>e.type==='firewall'&&e.on}
-];
-let mIdx=0, mDone=0;
-const miDots=document.getElementById('miDots');
-MISSIONS.forEach(()=>{const i=document.createElement('i');miDots.appendChild(i)});
-function renderMission(){
-  const card=document.getElementById('missionCard');
-  if(mIdx>=MISSIONS.length){
-    document.getElementById('miStep').textContent='TURNO COMPLETATO';
-    document.getElementById('miTitle').textContent='Tutte le missioni chiuse';
-    document.getElementById('miGoal').textContent='La rete è al sicuro. Vai al Debriefing per chiudere il turno: le tre domande finali ti aspettano.';
-    document.getElementById('miHint').textContent='Debriefing → in alto a destra';
-  }else{
-    const m=MISSIONS[mIdx];
-    document.getElementById('miStep').textContent='MISSIONE '+(mIdx+1)+' / '+MISSIONS.length;
-    document.getElementById('miTitle').textContent=m.title;
-    document.getElementById('miGoal').textContent=m.goal;
-    document.getElementById('miHint').textContent=m.hint;
+/* ---------- audio: effetti sintetizzati (Web Audio, nessun file) ---------- */
+const sfx=(function(){
+  let ctx=null,on=true;
+  function ac(){
+    if(!ctx){try{ctx=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}
+    if(ctx&&ctx.state==='suspended')ctx.resume();
+    return ctx;
   }
-  [...miDots.children].forEach((d,i)=>{
-    d.className= i<mIdx?'done':(i===mIdx?'cur':'');
-  });
+  function tone(f,dur,type,vol,when,slide){
+    const c=ac(); if(!c||!on) return;
+    const t=c.currentTime+(when||0);
+    const o=c.createOscillator(),g=c.createGain();
+    o.type=type||'sine'; o.frequency.setValueAtTime(f,t);
+    if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+dur);
+    g.gain.setValueAtTime(.0001,t);
+    g.gain.exponentialRampToValueAtTime(vol||.06,t+.015);
+    g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    o.connect(g);g.connect(c.destination);
+    o.start(t);o.stop(t+dur+.05);
+  }
+  return {
+    toggle(){on=!on;return on},
+    send(){tone(520,.12,'sine',.045,0,880)},
+    deliver(){tone(660,.09,'sine',.05);tone(990,.13,'sine',.05,.09)},
+    err(){tone(230,.15,'triangle',.05)},
+    mission(){[523,659,784].forEach((f,i)=>tone(f,.13,'sine',.06,i*.09))},
+    promo(){[392,523,659,784,1046].forEach((f,i)=>tone(f,.17,'sine',.065,i*.11))},
+    alert(){tone(330,.22,'sawtooth',.035);tone(330,.22,'sawtooth',.035,.38)},
+    block(){tone(320,.1,'square',.055,0,170)},
+    shield(){tone(180,.5,'sine',.05,0,420)},
+    learn(){tone(880,.08,'sine',.04);tone(1320,.1,'sine',.04,.08)}
+  };
+})();
+document.getElementById('btnSnd').addEventListener('click',()=>{
+  const on=sfx.toggle();
+  document.getElementById('btnSnd').classList.toggle('off',!on);
+  toast(on?'Suoni attivi':'Suoni disattivati');
+});
+
+/* ---------- effetti speciali: toast e particelle ---------- */
+function toast(msg,cls){
+  const box=document.getElementById('toasts'); if(!box) return;
+  const t=document.createElement('div');t.className='toast'+(cls?' '+cls:'');t.textContent=msg;
+  box.appendChild(t);
+  while(box.children.length>4) box.removeChild(box.firstChild);
+  setTimeout(()=>t.classList.add('out'),3400);
+  setTimeout(()=>t.remove(),3950);
+}
+function cityXY(code){const c=CITIES[code];return {x:px(c.lon),y:py(c.lat)}}
+function burst(x,y,color){
+  for(let i=0;i<7;i++){
+    const a=Math.PI*2*i/7, d=11+(i%3)*4;
+    const c=el('circle',{cx:x,cy:y,r:1.9,fill:color,class:'p-burst'},gPk);
+    c.style.setProperty('--dx',(Math.cos(a)*d).toFixed(1)+'px');
+    c.style.setProperty('--dy',(Math.sin(a)*d).toFixed(1)+'px');
+    setTimeout(()=>c.remove(),650);
+  }
+  const ring=el('circle',{cx:x,cy:y,r:5,class:'p-ring',stroke:color},gPk);
+  setTimeout(()=>ring.remove(),750);
+}
+function shieldFlash(code){const p=cityXY(code);burst(p.x,p.y,'#2EE6A8')}
+
+/* ---------- popup generico (promozioni, taccuino, fine carriera) ---------- */
+let pendingArm=false;
+function openPopup(html){
+  document.getElementById('popupBox').innerHTML=html;
+  document.getElementById('popupBg').classList.add('on');
+}
+function closePopup(){
+  document.getElementById('popupBg').classList.remove('on');
+  if(pendingArm){pendingArm=false;armMission()}
+}
+document.getElementById('popupBg').addEventListener('click',e=>{
+  if(e.target===document.getElementById('popupBg')) closePopup();
+});
+
+/* ---------- insegne di grado (SVG generato) ---------- */
+function insigniaSVG(n,size){
+  const chevN=Math.min(n,3);
+  let inner='';
+  for(let i=0;i<chevN;i++){
+    const y=46-i*10;
+    inner+='<path d="M21 '+y+' L32 '+(y-9)+' L43 '+y+'" stroke="'+((i===chevN-1&&n<4)?'#F2C14E':'#41C7FF')+'" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>';
+  }
+  if(n>=4) inner+='<path d="M32 5l2.3 4.8 5.2.8-3.8 3.6.9 5.2-4.6-2.5-4.6 2.5.9-5.2-3.8-3.6 5.2-.8z" fill="#F2C14E"/>';
+  return '<svg viewBox="0 0 64 64" width="'+size+'" height="'+size+'" aria-hidden="true">'
+    +'<path d="M32 2l24 9v16c0 16-10 28-24 34C18 55 8 43 8 27V11z" fill="rgba(65,199,255,.08)" stroke="#1E4270" stroke-width="2"/>'
+    +inner+'</svg>';
+}
+const CHECK_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="#2EE6A8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg>';
+
+/* ---------- taccuino del codice ---------- */
+const NOTEBOOK=[
+  {cmd:'HELP',syn:'HELP',desc:'Mostra l’elenco dei comandi disponibili.',ex:'HELP'},
+  {cmd:'SEND',syn:'SEND città1 città2',desc:'Divide il messaggio in pacchetti e lo spedisce lungo la rotta scelta.',ex:'SEND MILANO TOKYO'},
+  {cmd:'PING',syn:'PING città',desc:'Misura in millisecondi il viaggio di andata e ritorno di un pacchetto di prova.',ex:'PING SYDNEY'},
+  {cmd:'ROUTE',syn:'ROUTE CABLE | SAT',desc:'Sceglie la strada: cavi in fibra ottica oppure satelliti geostazionari.',ex:'ROUTE SAT'},
+  {cmd:'LOG',syn:'LOG ON | OFF',desc:'Accende o spegne il registro della navigazione degli utenti.',ex:'LOG ON'},
+  {cmd:'TRACE',syn:'TRACE utente',desc:'Ricostruisce il viaggio di un utente, salto per salto, fino al server.',ex:'TRACE lia_04'},
+  {cmd:'WHOIS',syn:'WHOIS utente',desc:'Mostra la carta d’identità di rete: dispositivo, browser, tempo online, minacce.',ex:'WHOIS lia_04'},
+  {cmd:'FILTER',syn:'FILTER utente | OFF',desc:'Filtra il registro su una sola persona, con la sua scheda in evidenza.',ex:'FILTER lia_04'},
+  {cmd:'INSPECT',syn:'INSPECT città',desc:'Esamina un nodo da vicino: carico di lavoro e collegamenti disponibili.',ex:'INSPECT TOKYO'},
+  {cmd:'REROUTE',syn:'REROUTE città',desc:'Scarica il traffico di un nodo congestionato sulle rotte vicine.',ex:'REROUTE TOKYO'},
+  {cmd:'STATUS',syn:'STATUS',desc:'Rapporto generale: rotte, firewall, nodi sotto pressione.',ex:'STATUS'},
+  {cmd:'SCAN',syn:'SCAN',desc:'Analizza il traffico di tutta la rete alla ricerca di sorgenti anomale.',ex:'SCAN'},
+  {cmd:'BLOCK',syn:'BLOCK ip',desc:'Isola una sorgente di attacco tramite il suo indirizzo IP.',ex:'BLOCK 203.0.113.66'},
+  {cmd:'FIREWALL',syn:'FIREWALL ON | OFF',desc:'Alza o abbassa lo scudo che filtra le richieste sospette.',ex:'FIREWALL ON'}
+];
+const learned=new Set();
+function updNbBtn(){document.getElementById('nbCount').textContent=learned.size+'/'+NOTEBOOK.length}
+function learn(cmd){
+  if(learned.has(cmd)) return;
+  learned.add(cmd); updNbBtn(); sfx.learn();
+  toast('Nuovo comando nel taccuino: '+cmd);
+  const b=document.getElementById('btnNb');
+  b.classList.remove('pulse');void b.offsetWidth;b.classList.add('pulse');
+}
+function showNotebook(){
+  const rows=NOTEBOOK.map(n=>{
+    if(learned.has(n.cmd)){
+      return '<div class="nb-row"><div class="nb-cmd">'+n.cmd+'</div><div class="nb-body">'
+        +'<span class="nb-syn">'+n.syn+'</span><p>'+n.desc+'</p><span class="nb-ex">es. '+n.ex+'</span></div></div>';
+    }
+    return '<div class="nb-row lock"><div class="nb-cmd">???</div><div class="nb-body">'
+      +'<p>Comando ancora da scoprire: usalo in sala controllo per sbloccarlo.</p></div></div>';
+  }).join('');
+  openPopup('<div class="nb-pop"><div class="nb-head"><h2>Taccuino del codice</h2>'
+    +'<span>'+learned.size+' / '+NOTEBOOK.length+' comandi imparati</span></div>'
+    +'<div class="nb-list">'+rows+'</div>'
+    +'<button class="btn-gold nb-close" onclick="closePopup()">Torna in sala</button></div>');
+}
+document.getElementById('btnNb').addEventListener('click',showNotebook);
+
+/* ---------- carriera: 4 livelli × 5 missioni ---------- */
+const pingSet=new Set();
+const LEVELS=[
+  {rank:'JUNIOR OPERATOR',it:'Operatore Junior',theme:'LE BASI',
+   comp:['Invio di pacchetti','Rotte: cavo e satellite','Misura della latenza'],
+   missions:[
+    {title:'Il manuale prima di tutto',goal:'Ogni operatore comincia dal manuale. Chiedi al terminale l’elenco dei comandi.',hint:'HELP',
+     check:e=>e.type==='help'},
+    {title:'Primo invio',goal:'Spedisci un pacchetto da Milano a New York e osserva la strada che sceglie.',hint:'SEND MILANO NEWYORK',
+     check:e=>e.type==='send'&&e.src==='MILANO'&&e.dst==='NEWYORK'&&e.via==='CABLE'},
+    {title:'Dall’altra parte del mondo',goal:'Ora una consegna lunga: spedisci un pacchetto fino a Sydney, dall’altra parte del pianeta.',hint:'SEND MILANO SYDNEY',
+     check:e=>e.type==='send'&&e.dst==='SYDNEY'},
+    {title:'La via del cielo',goal:'Passa ai satelliti e spedisci un pacchetto qualsiasi. Osserva la salita a 36.000 km.',hint:'ROUTE SAT · poi SEND …',
+     check:e=>e.type==='send'&&e.via==='SAT'},
+    {title:'Cronometro alla mano',goal:'Torna ai cavi e misura la latenza fino a Sydney. Chi vince, il cavo o il satellite?',hint:'ROUTE CABLE · poi PING SYDNEY',
+     check:e=>e.type==='ping'&&e.dst==='SYDNEY'&&e.via==='CABLE'}
+   ]},
+  {rank:'TRAFFIC ANALYST',it:'Analista del Traffico',theme:'ANALISI DEL TRAFFICO',
+   comp:['Lettura dei log','Tracciamento dei percorsi','Diagnostica dei nodi'],
+   missions:[
+    {title:'Occhi sulla rete',goal:'Accendi il registro di navigazione: chi sta navigando in questo momento?',hint:'LOG ON',
+     check:e=>e.type==='log'&&e.on},
+    {title:'Segui quel pacchetto',goal:'Scegli un utente dal registro e ricostruisci il suo viaggio, salto per salto.',hint:'TRACE nome_utente',
+     check:e=>e.type==='trace'},
+    {title:'Visita di controllo',goal:'Esamina da vicino un nodo della rete: carico di lavoro e collegamenti.',hint:'INSPECT TOKYO',
+     check:e=>e.type==='inspect'},
+    {title:'Tre misure valgono più di una',goal:'Un analista confronta sempre: misura la latenza verso 3 città diverse (in totale).',hint:'PING città · tre città diverse',
+     check:e=>e.type==='ping'&&pingSet.size>=3},
+    {title:'Il quadro generale',goal:'Chiudi l’analisi con il rapporto completo sullo stato della rete.',hint:'STATUS',
+     check:e=>e.type==='status'}
+   ]},
+  {rank:'NETWORK ENGINEER',it:'Ingegnere di Rete',theme:'INGEGNERIA DI RETE',
+   comp:['Gestione della congestione','Reinstradamento del traffico','Consegne ad alto volume'],
+   missions:[
+    {title:'Postino instancabile',goal:'La rete si impara consegnando: arriva a 8 pacchetti spediti in totale.',hint:'SEND … (fino a 8 in totale)',
+     check:e=>e.type==='send'&&stats.pk>=8},
+    {title:'Picco in vista',goal:'Un evento mondiale in diretta: TOKYO è in sovraccarico. Esamina il nodo.',hint:'INSPECT TOKYO',
+     check:e=>e.type==='inspect'&&e.city==='TOKYO',onStart:startCongestion},
+    {title:'Apri una via d’uscita',goal:'Scarica il traffico di Tokyo sulle rotte vicine, prima che il nodo si inceppi.',hint:'REROUTE TOKYO',
+     check:e=>e.type==='reroute'&&e.city==='TOKYO'},
+    {title:'Verifica sul campo',goal:'Un ingegnere non si fida: controlla che Tokyo risponda di nuovo a dovere.',hint:'PING TOKYO',
+     check:e=>e.type==='ping'&&e.dst==='TOKYO'},
+    {title:'Ponte fra due mondi',goal:'Gran finale da ingegnere: una consegna via satellite fino a Sydney.',hint:'ROUTE SAT · poi SEND … SYDNEY',
+     check:e=>e.type==='send'&&e.via==='SAT'&&e.dst==='SYDNEY'}
+   ]},
+  {rank:'CYBER GUARDIAN',it:'Guardiano della Rete',theme:'DIFESA CIBERNETICA',
+   comp:['Rilevamento delle minacce','Isolamento delle sorgenti','Prevenzione e firewall'],
+   missions:[
+    {title:'Allarme intrusione',goal:'Traffico anomalo sul nodo MILANO. Prima mossa di ogni difesa: monitorare.',hint:'SCAN',
+     check:e=>e.type==='scan'&&attack.started,onStart:startAttack},
+    {title:'Primo colpo',goal:'Le sorgenti sono identificate. Isola la prima.',hint:'BLOCK indirizzo_ip',
+     check:e=>e.type==='block'},
+    {title:'Nessuno escluso',goal:'Blocca tutte le sorgenti rimaste: il nodo deve tornare a respirare.',hint:'BLOCK … (tutte le sorgenti)',
+     check:e=>e.type==='allblocked'},
+    {title:'Scudo alzato',goal:'Rendi la difesa permanente su tutti i nodi della rete.',hint:'FIREWALL ON',
+     check:e=>e.type==='firewall'&&e.on},
+    {title:'La seconda ondata',goal:'La botnet ci riprova. Se lo scudo è alzato non devi fare nulla: osserva la mappa.',hint:'osserva… la prevenzione lavora da sola',
+     check:e=>e.type==='wave2',onStart:startWave2}
+   ]}
+];
+const TOT_MISSIONS=LEVELS.reduce((t,L)=>t+L.missions.length,0);
+let lvIdx=0, msIdx=0, doneCount=0;
+const miDots=document.getElementById('miDots');
+LEVELS[0].missions.forEach(()=>{const i=document.createElement('i');miDots.appendChild(i)});
+function curMission(){return lvIdx<LEVELS.length?LEVELS[lvIdx].missions[msIdx]:null}
+function rankName(){return lvIdx===0?'RECLUTA':LEVELS[Math.min(lvIdx,LEVELS.length)-1].rank}
+function renderMission(){
+  document.getElementById('miProg').textContent=doneCount+'/'+TOT_MISSIONS;
+  document.getElementById('rankName').textContent=rankName();
+  document.getElementById('rankIns').innerHTML=insigniaSVG(Math.min(lvIdx,LEVELS.length),15);
+  const dots=[...miDots.children];
+  if(lvIdx>=LEVELS.length){
+    document.getElementById('miStep').textContent='CARRIERA COMPLETA';
+    document.getElementById('miTitle').textContent='Grado finale: CYBER GUARDIAN';
+    document.getElementById('miGoal').textContent='Hai percorso tutta la scala: la rete è al sicuro. Vai al Debriefing per chiudere il turno.';
+    document.getElementById('miHint').textContent='Debriefing → in alto a destra';
+    dots.forEach(d=>d.className='done');
+    return;
+  }
+  const L=LEVELS[lvIdx], m=L.missions[msIdx];
+  document.getElementById('miStep').textContent='LIVELLO '+(lvIdx+1)+'/'+LEVELS.length+' · '+L.theme;
+  document.getElementById('miTitle').textContent='M'+(lvIdx+1)+'.'+(msIdx+1)+' — '+m.title;
+  document.getElementById('miGoal').textContent=m.goal;
+  document.getElementById('miHint').textContent=m.hint;
+  dots.forEach((d,i)=>{d.className= i<msIdx?'done':(i===msIdx?'cur':'')});
+}
+function armMission(){
+  const m=curMission();
+  if(m&&m.onStart&&!m._armed){m._armed=true;setTimeout(m.onStart,1600)}
 }
 function fire(evt){
-  if(mIdx>=MISSIONS.length) return;
-  const m=MISSIONS[mIdx];
-  if(m.check(evt)){
-    mIdx++; mDone++;
-    tprint('ok','MISSIONE '+mIdx+' COMPLETATA — '+m.title);
-    const card=document.getElementById('missionCard');
-    card.classList.remove('flash');void card.offsetWidth;card.classList.add('flash');
+  const m=curMission(); if(!m) return;
+  let ok=false;
+  try{ ok=!!m.check(evt) }catch(err){ ok=false }
+  if(!ok) return;
+  doneCount++;
+  sfx.mission();
+  tprint('ok','MISSIONE M'+(lvIdx+1)+'.'+(msIdx+1)+' COMPLETATA — '+m.title);
+  toast('Missione completata: '+m.title,'gold');
+  const card=document.getElementById('missionCard');
+  card.classList.remove('flash');void card.offsetWidth;card.classList.add('flash');
+  msIdx++;
+  if(msIdx>=LEVELS[lvIdx].missions.length){
+    const completed=lvIdx;
+    lvIdx++; msIdx=0;
     renderMission();
-    if(mIdx===4){ setTimeout(startAttack, 5000); }
-    if(mIdx>=MISSIONS.length){
-      tprint('gold','TURNO COMPLETATO. Sei stato un vero operatore di rete.');
-      tprint('mut','Apri il Debriefing (in alto) per le domande finali.');
-    }
+    if(lvIdx>=LEVELS.length){ setTimeout(careerComplete,900); }
+    else { pendingArm=true; setTimeout(()=>showPromo(completed),900); }
+  }else{
+    renderMission(); armMission();
   }
 }
+function showPromo(ci){
+  const L=LEVELS[ci];
+  sfx.promo();
+  const badges=L.comp.map(c=>'<span class="badge">'+CHECK_SVG+c+'</span>').join('');
+  openPopup('<div class="promo">'
+    +'<div class="promo-k">PROMOZIONE SUL CAMPO</div>'
+    +'<span class="promo-ins">'+insigniaSVG(ci+1,90)+'</span>'
+    +'<h2 class="promo-rank">'+L.rank+'</h2>'
+    +'<div class="promo-it">'+L.it+' · livello '+(ci+1)+' completato</div>'
+    +'<div class="promo-comp"><div class="pc-t">COMPETENZE CONQUISTATE</div>'+badges+'</div>'
+    +'<button class="btn-gold" onclick="closePopup()">Livello '+(ci+2)+' · si continua</button>'
+    +'</div>');
+}
+function careerComplete(){
+  sfx.promo();
+  const rows=LEVELS.map((L,i)=>'<div class="cc-row">'+insigniaSVG(i+1,30)
+    +'<div><b>'+L.rank+'</b><span>'+L.it+'</span></div></div>').join('');
+  const nComp=LEVELS.reduce((t,L)=>t+L.comp.length,0);
+  openPopup('<div class="promo">'
+    +'<div class="promo-k">CARRIERA COMPLETA</div>'
+    +'<span class="promo-ins">'+insigniaSVG(4,96)+'</span>'
+    +'<h2 class="promo-rank">CYBER GUARDIAN</h2>'
+    +'<div class="promo-it">Hai percorso tutta la scala: '+TOT_MISSIONS+' missioni, '+nComp+' competenze, '
+    +learned.size+' comandi nel taccuino.</div>'
+    +'<div class="cc-rows">'+rows+'</div>'
+    +'<button class="btn-gold" onclick="closePopup();go(\'debrief\')">Vai al Debriefing</button>'
+    +'</div>');
+}
 renderMission();
-document.getElementById('startNote').textContent=MISSIONS.length+' missioni ti aspettano. La prima è già sul monitor.';
+armMission();
+updNbBtn();
+document.getElementById('startNote').textContent=LEVELS.length+' livelli · '+TOT_MISSIONS+' missioni · gradi e competenze da conquistare. Si parte come Recluta.';
+
+/* ---------- evento: congestione su Tokyo (livello 3) ---------- */
+const congestion={active:false,target:'TOKYO',timer:null};
+function startCongestion(){
+  if(congestion.active) return;
+  congestion.active=true;
+  loads[congestion.target]=Math.max(loads[congestion.target],90);
+  renderLoads();
+  cityG(congestion.target).classList.add('under');
+  document.getElementById('alertTxt').textContent='PICCO DI TRAFFICO SUL NODO TOKYO';
+  document.getElementById('alertBar').classList.add('on');
+  sfx.alert();
+  toast('Picco di traffico su TOKYO','warn');
+  tprint('warn','');
+  tprint('warn','!!! PICCO — un evento mondiale in diretta streaming: il nodo TOKYO è al limite.');
+  tprint('mut','Esamina la situazione da vicino: INSPECT TOKYO');
+  congestion.timer=setInterval(()=>{
+    if(congestion.active){loads[congestion.target]=Math.min(96,loads[congestion.target]+(Math.random()*3-.5));renderLoads()}
+  },1500);
+}
+function endCongestion(){
+  congestion.active=false; clearInterval(congestion.timer);
+  document.getElementById('alertBar').classList.remove('on');
+  const rec=setInterval(()=>{
+    loads[congestion.target]=Math.max(42,loads[congestion.target]-7);
+    renderLoads();
+    if(loads[congestion.target]<=42){clearInterval(rec);cityG(congestion.target).classList.remove('under')}
+  },450);
+}
+
+/* ---------- evento: seconda ondata (livello 4, finale) ---------- */
+let wave2done=false;
+function startWave2(){
+  tprint('warn','');
+  tprint('warn','Movimento nella botnet: SECONDA ONDATA in arrivo verso MILANO…');
+  toast('Seconda ondata in arrivo','warn');
+  sfx.alert();
+  setTimeout(launchWave,2000);
+}
+function launchWave(){
+  if(wave2done) return;
+  const protectedNow=firewall;
+  ATTACKERS.forEach((a,ai)=>{
+    for(let k=0;k<4;k++){
+      setTimeout(()=>{
+        const segs=dijkstra(a.from,'MILANO');
+        if(!segs) return;
+        spawnPacket({
+          segs:segs.map(x=>({el:x.e.el,len:x.e.len,rev:x.rev})),
+          color:'#FFB547',r:2.4,visMs:1800,trail:false,
+          onEnd:()=>{
+            if(protectedNow){ shieldFlash('MILANO'); }
+            else { loads.MILANO=Math.min(96,loads.MILANO+3); renderLoads(); }
+          }
+        });
+      }, ai*300+k*450);
+    }
+  });
+  setTimeout(()=>{
+    if(wave2done) return;
+    if(protectedNow){
+      wave2done=true;
+      stats.thr+=ATTACKERS.length; updHud();
+      sfx.shield();
+      tprint('ok','Onda respinta: il firewall ha filtrato tutte le richieste della botnet.');
+      tprint('gold','La rete ha retto senza che tu muovessi un dito: questa è la prevenzione.');
+      fire({type:'wave2'});
+    }else{
+      tprint('warn','Il nodo MILANO ha sofferto: lo scudo era abbassato. FIREWALL ON, e la botnet troverà porte chiuse.');
+      setTimeout(launchWave,6000);
+    }
+  }, ATTACKERS.length*300+4*450+2400);
+}
 
 /* ---------- attacco DDoS ---------- */
 const attack={active:false,target:'MILANO',streams:[],timer:null,started:false};
@@ -1142,6 +1840,8 @@ function startAttack(){
   document.getElementById('alertTxt').textContent='ALERT · TRAFFICO ANOMALO SUL NODO MILANO';
   bar.classList.add('on');
   cityG('MILANO').classList.add('under');
+  sfx.alert();
+  toast('ALERT · attacco DDoS in corso','warn');
   tprint('warn','');
   tprint('warn','!!! ALERT — il nodo MILANO riceve migliaia di richieste al secondo.');
   tprint('warn','Il meccanismo si sta inceppando. Prima mossa: MONITORARE.');
@@ -1211,23 +1911,32 @@ const COMMANDS={
     tprint('mut','ROUTE CABLE|SAT      sceglie la strada: cavi o satelliti');
     tprint('mut','LOG ON|OFF           accende/spegne il registro di navigazione');
     tprint('mut','TRACE utente         segue il viaggio di un utente del registro');
+    tprint('mut','WHOIS utente         carta d’identità di rete di un utente');
+    tprint('mut','FILTER utente|OFF    il registro mostra solo quell’utente');
+    tprint('mut','INSPECT città        esamina un nodo: carico e collegamenti');
+    tprint('mut','REROUTE città        scarica un nodo congestionato sulle rotte vicine');
     tprint('mut','SCAN                 cerca traffico anomalo nella rete');
     tprint('mut','BLOCK ip             blocca una sorgente di attacco');
     tprint('mut','FIREWALL ON|OFF      attiva/disattiva lo scudo della rete');
     tprint('mut','STATUS · MISSION · CLEAR');
     tprint('sys','CITTÀ: '+Object.keys(CITIES).join(' '));
+    learn('HELP');
+    fire({type:'help'});
   },
   SEND(args){
     const src=normCity(args[0]), dst=normCity(args[1]);
     if(!src||!dst){tprint('warn','Mi servono due città. Esempio: SEND MILANO NEWYORK — elenco con HELP');return}
     if(src===dst){tprint('warn','Partenza e arrivo coincidono: il pacchetto resterebbe a casa.');return}
     const res=sendPacket(src,dst,{color:'#8FE3FF',r:3.6,onEnd:()=>{
+      sfx.deliver();
+      const pd=cityXY(dst); burst(pd.x,pd.y,'#8FE3FF');
       tprint('ok','Pacchetto consegnato a '+CITIES[dst].n+' · '+res.ms+' ms'+(res.via==='SAT'?' via satellite':' via cavo ('+res.km+' km)'));
       stats.lastMs=res.ms;updHud();
       fire({type:'send',src,dst,via:res.via});
     }});
     if(!res){tprint('warn','Nessun percorso disponibile.');return}
     stats.pk++;updHud();
+    learn('SEND'); sfx.send();
     tprint('sys','Invio: '+CITIES[src].n+' → '+CITIES[dst].n+' · route '+res.via+(res.via==='CABLE'?' · '+res.hops+' tratte':'')+' · in viaggio…');
   },
   PING(args){
@@ -1238,12 +1947,15 @@ const COMMANDS={
     const res=sendPacket(here,dst,{color:'#2EE6A8',r:2.8,onEnd:()=>{
       sendPacket(dst,here,{color:'#2EE6A8',r:2.8,onEnd:()=>{
         const rtt=res.ms*2;
+        sfx.deliver();
         tprint('ok','PING '+dst+' · risposta in '+rtt+' ms (andata e ritorno'+(res.via==='SAT'?', via satellite':'')+')');
         stats.lastMs=rtt;updHud();
-        fire({type:'ping',dst});
+        pingSet.add(dst);
+        fire({type:'ping',dst,via:res.via});
       }});
     }});
     if(!res){tprint('warn','Nessun percorso disponibile.');return}
+    learn('PING'); sfx.send();
     tprint('sys','PING '+dst+' · pacchetto di prova in viaggio…');
   },
   ROUTE(args){
@@ -1251,6 +1963,7 @@ const COMMANDS={
     if(m==='CABLE'||m==='SAT'){
       routeMode=m;
       document.getElementById('routeMode').textContent=m;
+      learn('ROUTE');
       tprint('ok','Route impostata: '+(m==='SAT'?'SATELLITE — il segnale salirà a 36.000 km':'CABLE — fibra ottica e cavi sottomarini'));
     }else tprint('warn','Scrivi ROUTE CABLE oppure ROUTE SAT');
   },
@@ -1259,8 +1972,10 @@ const COMMANDS={
     if(m==='ON'){
       if(!logOn){logOn=true;logFeed.innerHTML='';tprint('ok','Registro acceso: ecco chi sta navigando adesso.')}
       else tprint('mut','Il registro è già acceso.');
+      learn('LOG');
+      fire({type:'log',on:true});
     }else if(m==='OFF'){
-      logOn=false;tprint('mut','Registro spento.');
+      logOn=false;learn('LOG');tprint('mut','Registro spento.');
     }else tprint('warn','Scrivi LOG ON oppure LOG OFF');
   },
   TRACE(args){
@@ -1289,13 +2004,86 @@ const COMMANDS={
       sendPacket(r.src,r.dst,{color:'#F2C14E',r:3.2,forceCable:true});
       setTimeout(()=>segs.forEach(s=>s.e.el.classList.remove('lit')),5200);
     }
+    learn('TRACE'); sfx.send();
     fire({type:'trace',user:u});
   },
+  WHOIS(args){
+    if(!logOn){tprint('warn','Prima accendi il registro: LOG ON');return}
+    const u=findUser(args[0]);
+    if(!u){tprint('warn','Utente non trovato nel registro. Prova con uno dei nomi che vedi a sinistra.');return}
+    const p=profileOf(u);
+    tprint('sys','WHOIS '+u+' — carta d’identità di rete');
+    tprint('mut','  si collega da     '+CITIES[p.home].n);
+    tprint('mut','  dispositivo       '+p.device);
+    tprint('mut','  browser           '+p.browser);
+    tprint('mut','  online da         '+onlineMin(p)+' minuti');
+    tprint('mut','  dati scambiati    '+p.mb.toFixed(1)+' MB');
+    tprint(p.threats?'warn':'mut','  minacce ricevute  '+p.threats+(p.threats?' (tutte bloccate dalla rete)':''));
+    tprint('mut','Nota bene: il traffico racconta molto di noi. Per fortuna questi utenti sono inventati.');
+    learn('WHOIS');
+    fire({type:'whois',user:u});
+  },
+  FILTER(args){
+    const a=(args[0]||'').toUpperCase();
+    if(a==='OFF'){
+      logFilter=null; renderLogProfile();
+      tprint('mut','Filtro rimosso: il registro mostra di nuovo tutti gli utenti.');
+      learn('FILTER');
+      return;
+    }
+    if(!logOn){tprint('warn','Prima accendi il registro: LOG ON');return}
+    const u=findUser(args[0]);
+    if(!u){tprint('warn','Utente non trovato nel registro. Aspetta che compaia o tocca un nome a sinistra.');return}
+    logFilter=u; renderLogProfile();
+    logFeed.innerHTML='';
+    const p=profileOf(u);
+    tprint('ok','FILTER '+u+' · il registro ora mostra solo questa persona.');
+    tprint('mut','  '+p.device+' · '+p.browser+' · online da '+onlineMin(p)+' min · da '+CITIES[p.home].n);
+    tprint('mut','Osserva il pannello a sinistra: la sua scheda è in cima al registro. FILTER OFF per uscire.');
+    learn('FILTER'); sfx.send();
+    fire({type:'filter',user:u});
+  },
+  INSPECT(args){
+    const c=normCity(args[0]);
+    if(!c){tprint('warn','Quale nodo? Esempio: INSPECT TOKYO');return}
+    const nbs=neighbors(c);
+    const load=Math.round(loads[c]);
+    const p=cityXY(c); burst(p.x,p.y,'#41C7FF');
+    tprint('sys','INSPECT '+c+' — nodo di '+CITIES[c].n);
+    tprint(load>80?'warn':'mut','  carico attuale: '+load+'%'+(load>80?'  [SOVRACCARICO]':load>60?'  [intenso]':'  [normale]'));
+    tprint('mut','  collegamenti attivi: '+nbs.length);
+    nbs.forEach(x=>{
+      tprint('mut','   · '+(x.e.type==='sub'?'cavo sottomarino':'dorsale terrestre')+' → '+x.to+' ('+Math.round(x.e.km)+' km)');
+    });
+    if(load>80) tprint('warn','  suggerimento: REROUTE '+c+' per scaricare il traffico sulle rotte vicine.');
+    learn('INSPECT');
+    fire({type:'inspect',city:c});
+  },
+  REROUTE(args){
+    const c=normCity(args[0]);
+    if(!c){tprint('warn','Quale nodo? Esempio: REROUTE TOKYO');return}
+    if(loads[c]<78){
+      tprint('mut','Il nodo '+c+' ha un carico normale ('+Math.round(loads[c])+'%): nessun reinstradamento necessario.');
+      return;
+    }
+    const nbs=neighbors(c).slice(0,3);
+    nbs.forEach((nb,i)=>{
+      setTimeout(()=>spawnPacket({segs:[{el:nb.e.el,len:nb.e.len,rev:nb.rev}],color:'#8FE3FF',r:2.6,visMs:1600,trail:false}),i*260);
+    });
+    tprint('ok','REROUTE '+c+' · traffico deviato verso '+nbs.map(n=>n.to).join(', ')+'.');
+    tprint('mut','Il carico sta scendendo: la rete respira di nuovo.');
+    if(congestion.active && c===congestion.target){ endCongestion(); }
+    else { loads[c]=Math.max(45,loads[c]-30); renderLoads(); }
+    learn('REROUTE'); sfx.deliver();
+    fire({type:'reroute',city:c});
+  },
   SCAN(){
-    tprint('sys','SCAN in corso · analisi del traffico su 12 nodi…');
+    tprint('sys','SCAN in corso · analisi del traffico su '+Object.keys(CITIES).length+' nodi…');
+    learn('SCAN'); sfx.send();
     setTimeout(()=>{
       if(!attack.started||attack.streams.every(s=>s.blocked)){
         tprint('ok','Nessuna anomalia: il traffico è nella norma su tutti i nodi.');
+        fire({type:'scan'});
         return;
       }
       tprint('warn','TROVATE '+attack.streams.filter(s=>!s.blocked).length+' SORGENTI ANOMALE → bersaglio: nodo MILANO');
@@ -1303,6 +2091,7 @@ const COMMANDS={
         tprint(s.blocked?'mut':'warn','  '+s.ip.padEnd(16)+' da '+s.from.padEnd(12)+' '+s.bot+(s.blocked?'  [BLOCCATA]':'  [ATTIVA]'));
       });
       tprint('mut','Seconda mossa fatta: IDENTIFICARE. Ora BLOCCA: BLOCK indirizzo_ip');
+      fire({type:'scan'});
     },900);
   },
   BLOCK(args){
@@ -1313,7 +2102,10 @@ const COMMANDS={
     if(!s){tprint('warn','Nessuna sorgente anomala con IP '+ip+'. Riprova con SCAN.');return}
     if(s.blocked){tprint('mut','Quella sorgente è già bloccata.');return}
     s.blocked=true;stats.thr++;updHud();
+    learn('BLOCK'); sfx.block();
+    const pb=cityXY(s.from); burst(pb.x,pb.y,'#FFB547');
     tprint('ok','BLOCK '+ip+' · sorgente isolata. Il flusso da '+s.from+' si sta fermando.');
+    fire({type:'block',ip:ip});
     endAttackIfDone();
   },
   FIREWALL(args){
@@ -1322,7 +2114,11 @@ const COMMANDS={
       firewall=true;
       const f=document.getElementById('fwFlag');f.classList.add('on');
       document.getElementById('fwState').textContent='ON';
-      Object.keys(CITIES).forEach(c=>cityG(c).classList.add('shielded'));
+      Object.keys(CITIES).forEach((c,i)=>{
+        cityG(c).classList.add('shielded');
+        setTimeout(()=>shieldFlash(c),i*70);
+      });
+      learn('FIREWALL'); sfx.shield();
       tprint('ok','FIREWALL attivo su tutti i nodi: le richieste sospette ora vengono filtrate in automatico.');
       fire({type:'firewall',on:true});
     }else if(m==='OFF'){
@@ -1330,6 +2126,7 @@ const COMMANDS={
       document.getElementById('fwFlag').classList.remove('on');
       document.getElementById('fwState').textContent='OFF';
       Object.keys(CITIES).forEach(c=>cityG(c).classList.remove('shielded'));
+      learn('FIREWALL');
       tprint('mut','Firewall disattivato.');
     }else tprint('warn','Scrivi FIREWALL ON oppure FIREWALL OFF');
   },
@@ -1339,13 +2136,16 @@ const COMMANDS={
     tprint('mut','pacchetti inviati: '+stats.pk+' · minacce bloccate: '+stats.thr);
     const hot=Object.keys(loads).filter(c=>loads[c]>75);
     tprint(hot.length?'warn':'ok', hot.length?('nodi sotto pressione: '+hot.join(', ')):'tutti i nodi lavorano normalmente');
+    learn('STATUS');
+    fire({type:'status'});
   },
   MISSION(){
-    if(mIdx>=MISSIONS.length){tprint('gold','Turno completato: vai al Debriefing.');return}
-    const m=MISSIONS[mIdx];
-    tprint('sys','MISSIONE '+(mIdx+1)+'/'+MISSIONS.length+' — '+m.title);
-    tprint('mut',m.goal);
+    if(lvIdx>=LEVELS.length){tprint('gold','Carriera completa: vai al Debriefing.');return}
+    const L=LEVELS[lvIdx], m=L.missions[msIdx];
+    tprint('sys','LIVELLO '+(lvIdx+1)+'/'+LEVELS.length+' · '+L.theme+' — MISSIONE M'+(lvIdx+1)+'.'+(msIdx+1));
+    tprint('mut',m.title+' — '+m.goal);
     tprint('mut','Suggerimento: '+m.hint);
+    tprint('mut','Grado attuale: '+rankName()+' · progresso: '+doneCount+'/'+TOT_MISSIONS);
   },
   CLEAR(){tout.innerHTML=''}
 };
@@ -1360,7 +2160,7 @@ function runCmd(raw){
   const cmd=parts[0].toUpperCase();
   const fn=COMMANDS[cmd];
   if(fn) fn(parts.slice(1));
-  else tprint('warn','Comando "'+cmd+'" non riconosciuto. Scrivi HELP per l’elenco.');
+  else { sfx.err(); tprint('warn','Comando "'+cmd+'" non riconosciuto. Scrivi HELP per l’elenco.'); }
 }
 cmdIn.addEventListener('keydown',e=>{
   if(e.key==='Enter'){runCmd(cmdIn.value);cmdIn.value=''}
@@ -1370,7 +2170,7 @@ cmdIn.addEventListener('keydown',e=>{
 document.getElementById('btnRun').addEventListener('click',()=>{runCmd(cmdIn.value);cmdIn.value='';cmdIn.focus()});
 
 /* chip comandi rapidi (scaffolding) */
-const CHIPS=['HELP','SEND MILANO NEWYORK','ROUTE SAT','ROUTE CABLE','PING SYDNEY','LOG ON','SCAN','FIREWALL ON'];
+const CHIPS=['HELP','SEND MILANO NEWYORK','ROUTE SAT','ROUTE CABLE','PING SYDNEY','LOG ON','INSPECT TOKYO','REROUTE TOKYO','STATUS','SCAN','FIREWALL ON'];
 const chipsBox=document.getElementById('chips');
 CHIPS.forEach(c=>{
   const b=document.createElement('button');b.textContent=c;
@@ -1379,15 +2179,22 @@ CHIPS.forEach(c=>{
 });
 
 /* benvenuto */
-tprint('sys','NET CONTROL v1.0 · terminale operatore pronto.');
+tprint('sys','NOC · Network Operations Center v2.0 · terminale operatore pronto.');
 tprint('mut','I comandi sono parole inglesi, come nei sistemi veri.');
-tprint('mut','Scrivi HELP e premi Invio per cominciare.');
+tprint('mut','Ogni comando nuovo che usi finisce nel TACCUINO (pulsante qui sopra).');
+tprint('mut','Scrivi HELP e premi Invio per cominciare la carriera.');
 
 /* ---------- debriefing ---------- */
 function refreshDebrief(){
   document.getElementById('dbPk').textContent=stats.pk;
-  document.getElementById('dbMi').textContent=mDone+'/'+MISSIONS.length;
+  document.getElementById('dbMi').textContent=doneCount+'/'+TOT_MISSIONS;
   document.getElementById('dbThr').textContent=stats.thr;
+  document.getElementById('dbRank').textContent=rankName();
+  const comps=LEVELS.slice(0,lvIdx).flatMap(L=>L.comp);
+  const box=document.getElementById('debComp');
+  box.innerHTML=comps.length
+    ? '<div class="pc-t">COMPETENZE CONQUISTATE</div>'+comps.map(c=>'<span class="badge">'+CHECK_SVG+c+'</span>').join('')
+    : '';
 }
 
 /* ---------- modal docenti ---------- */
@@ -1407,33 +2214,37 @@ const DOC_TABS=[
 <div class="tagrow"><span class="tag">Cittadinanza Digitale</span><span class="tag">Coding</span><span class="tag">Sicurezza informatica</span><span class="tag">Pensiero computazionale</span><span class="tag">Metacognizione</span><span class="tag">CLIL micro-lessico EN</span></div>`,
 `<h3>Struttura dell’esperienza</h3>
 <ul>
-<li><b>Briefing</b> — narrazione di aggancio (loop aperto: "l’attività strana"), consegna e ingresso in sala.</li>
+<li><b>Briefing</b> — <b>presentazione audio</b>: la voce del docente (≈3 min) spiega la missione mentre sette schede si "accendono" sincronizzate col discorso (effetto Zeigarnik: le tappe partono bloccate e si sbloccano al momento giusto). Sostituisce il muro di testo iniziale. Player senza distrazioni; si può saltare col pulsante "Entra in sala".</li>
 <li><b>Sala Controllo</b> — tre zone: log di navigazione e stato dei nodi (sinistra), planisfero vivo (centro), missioni + terminale (destra).</li>
 <li><b>Manuale</b> — 5 schede (pacchetti, cavi sottomarini, satelliti, ultimo miglio, attacchi e difese), ognuna chiusa da una consegna pratica.</li>
 <li><b>Debriefing</b> — statistiche del turno, chiusura dei loop narrativi, tre domande metacognitive (non salvate: si copiano sul quaderno).</li>
 </ul>
-<h3>Le 6 missioni</h3>
+<h3>La carriera: 4 livelli × 5 missioni</h3>
 <ul>
-<li>1 · Primo invio (SEND) — il pacchetto e la rotta.</li>
-<li>2 · La via del cielo (ROUTE SAT) — confronto cavo/satellite.</li>
-<li>3 · Misura l’oceano (PING) — latenza e distanza.</li>
-<li>4 · Occhi sulla rete (LOG, TRACE) — l’ultimo miglio, i "salti" del segnale.</li>
-<li>5 · Allarme intrusione (SCAN, BLOCK) — attacco DDoS simulato.</li>
-<li>6 · Scudo alzato (FIREWALL) — prevenzione.</li>
+<li><b>Livello 1 · Le basi</b> → grado <b>JUNIOR OPERATOR</b>: HELP, SEND, ROUTE, PING.</li>
+<li><b>Livello 2 · Analisi del traffico</b> → grado <b>TRAFFIC ANALYST</b>: LOG, TRACE, INSPECT, STATUS.</li>
+<li><b>Livello 3 · Ingegneria di rete</b> → grado <b>NETWORK ENGINEER</b>: picco di congestione su Tokyo, REROUTE, consegna via satellite.</li>
+<li><b>Livello 4 · Difesa cibernetica</b> → grado <b>CYBER GUARDIAN</b>: attacco DDoS, SCAN, BLOCK, FIREWALL e la "seconda ondata" respinta dallo scudo.</li>
 </ul>
-<p>L’attacco parte in automatico ~5 secondi dopo la missione 4: prevedere questo momento in classe (è il picco di attenzione).</p>
+<p>Ogni promozione apre una finestra con l’insegna del nuovo grado e le <b>3 competenze conquistate</b>: è la meccanica del riconoscimento, non della classifica. Il <b>Taccuino del codice</b> raccoglie i comandi via via scoperti: è il glossario personale che lo studente costruisce usando il terminale, non leggendo una lista.</p>
+<p>Gli eventi scattano in automatico quando la missione relativa diventa corrente: congestione su Tokyo (M3.2), attacco DDoS (M4.1), seconda ondata (M4.5). Sono i picchi di attenzione: prevederli in classe.</p>
 <h3>Tempi consigliati</h3>
-<p>60-90 minuti: 10′ briefing e lancio, 30-40′ sala controllo in coppia, 15′ manuale con consegne, 10-15′ debriefing condiviso.</p>`,
+<p>90-120 minuti, oppure due incontri: livelli 1-2 nel primo, 3-4 nel secondo. Il Manuale si consulta tra un livello e l’altro.</p>`,
 `<h3>Perché comandi in inglese</h3>
 <p>È il primo contatto con la forma reale del coding: <b>comando + argomenti</b>, lessico tecnico inglese (send, route, trace, scan, block, firewall), sintassi rigorosa ma indulgente (maiuscole/minuscole indifferenti, messaggi d’errore che spiegano come correggersi — mai punitivi, mai rossi).</p>
 <h3>Dati e privacy</h3>
 <p>Gli utenti del log sono <b>fittizi e generati localmente</b>; nessun dato reale viene raccolto né trasmesso; le risposte del debriefing restano nella pagina. Gli IP degli attaccanti usano gli intervalli riservati alla documentazione (203.0.113.x, 198.51.100.x, 192.0.2.x): un dettaglio tecnico corretto da far notare ai più curiosi.</p>
+<p>I comandi <b>WHOIS</b> e <b>FILTER</b> mostrano quanto "raccontano" i metadati di navigazione — dispositivo, browser, tempi di connessione, minacce ricevute — su profili interamente inventati: è l’aggancio esplicito al tema dell’<b>impronta digitale</b>, da riprendere in discussione ("se questo lo vede la sala di controllo, chi altro può vederlo?").</p>
 <h3>Accuratezza del modello</h3>
 <ul>
-<li>Le latenze sono calcolate con distanze reali (fibra ≈ 200.000 km/s) e rallentate di ~9× per essere osservabili.</li>
+<li>Le latenze sono calcolate con distanze reali (fibra ≈ 200.000 km/s) e rallentate di ~20× per essere osservabili.</li>
 <li>I satelliti sono geostazionari: fermi nel cielo, 36.000 km, ~120 ms a tratta — per questo nella simulazione "si perdono" contro i cavi.</li>
-<li>Le rotte dei cavi ricalcano le dorsali reali (transatlantica, transpacifica, Mediterraneo-Mar Rosso).</li>
+<li>Le rotte ricalcano dorsali reali: transatlantica, transpacifica, Mediterraneo-Mar Rosso e la <b>dorsale terrestre transiberiana</b> (Milano–Mosca–Tokyo).</li>
 </ul>
+<h3>Audio del briefing</h3>
+<p>Il briefing usa un file vocale (<b>discorso.mp3</b>, ≈3 min) registrato dal docente. Le sette schede si sbloccano su <b>timestamp</b> tarati sul discorso; se in futuro si cambia la registrazione, basta ritoccare i valori <code>data-t</code> delle schede (in secondi). Il browser richiede un tocco su "play" prima di riprodurre: in classe lo avvia il docente.</p>
+<h3>Suoni ed effetti di gioco</h3>
+<p>Gli effetti in sala controllo sono <b>sintetizzati al volo con la Web Audio API</b>: nessun file audio, volume discreto, disattivabili con il pulsante altoparlante in alto. Il suono parte solo dopo il primo gesto dello studente (vincolo dei browser, rispettato per progettazione). In laboratorio con più postazioni: cuffie, o suoni spenti.</p>
 <h3>Requisiti</h3>
 <p>File singolo, nessuna installazione: si apre con doppio clic su iPad, iMac o LIM. Funziona interamente offline (serve la rete solo per i font).</p>`
 ];
@@ -1449,7 +2260,59 @@ modalBg.addEventListener('click',e=>{if(e.target===modalBg)modalBg.classList.rem
 document.getElementById('mtabs').addEventListener('click',e=>{
   const b=e.target.closest('button');if(b)showTab(+b.dataset.tab);
 });
-document.addEventListener('keydown',e=>{if(e.key==='Escape')modalBg.classList.remove('on')});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){modalBg.classList.remove('on');closePopup();closeSigla();}
+});
+
+/* ---------- sigla video di apertura ----------
+   Player custom senza distrazioni: iframe con pointer-events:none,
+   overlay che intercetta i click, nessun fullscreen, nessun menu.
+   Si chiude da sola alla fine del video (o con "Salta"). */
+const SIGLA_ID='S2kymv60ndQ';
+let ytPlayer=null, ytReady=false, ytWantPlay=false, siglaDone=false;
+function closeSigla(){
+  if(siglaDone) return; siglaDone=true;
+  try{ if(ytPlayer&&ytPlayer.stopVideo) ytPlayer.stopVideo(); }catch(err){}
+  const s=document.getElementById('siglaBg');
+  if(s){ s.classList.add('out'); setTimeout(()=>s.remove(),700); }
+}
+window.onYouTubeIframeAPIReady=function(){
+  try{
+    ytPlayer=new YT.Player('ytSigla',{
+      videoId:SIGLA_ID,
+      playerVars:{controls:0,fs:0,modestbranding:1,rel:0,iv_load_policy:3,disablekb:1,playsinline:1,enablejsapi:1},
+      events:{
+        onReady:()=>{ ytReady=true; if(ytWantPlay) ytPlayer.playVideo(); },
+        onStateChange:e=>{ if(e.data===YT.PlayerState.ENDED) closeSigla(); },
+        onError:()=>{ closeSigla(); }
+      }
+    });
+  }catch(err){ /* API assente (offline): la sigla si salta col pulsante */ }
+};
+(function(){
+  const tag=document.createElement('script');
+  tag.src='https://www.youtube.com/iframe_api';
+  tag.onerror=function(){ /* offline: resta la cover, si chiude al click */ };
+  document.head.appendChild(tag);
+  const cover=document.getElementById('siglaCover');
+  function startSigla(){
+    cover.classList.add('off');
+    if(ytReady){ ytPlayer.playVideo(); }
+    else{
+      ytWantPlay=true;
+      /* se l'API non arriva (nessuna rete), non blocchiamo la classe */
+      setTimeout(()=>{ if(!ytReady) closeSigla(); },3500);
+    }
+  }
+  cover.addEventListener('click',startSigla);
+  cover.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();startSigla();} });
+  document.getElementById('siglaShield').addEventListener('click',()=>{
+    if(!ytReady) return;
+    const st=ytPlayer.getPlayerState();
+    if(st===YT.PlayerState.PLAYING) ytPlayer.pauseVideo(); else ytPlayer.playVideo();
+  });
+  document.getElementById('siglaSkip').addEventListener('click',closeSigla);
+})();
 </script>
 </body>
 </html>

@@ -151,34 +151,33 @@ h1,h2,h3,h4{font-family:var(--head)}
 
 .sync-hint{margin-top:20px;font-family:var(--mono);font-size:12px;letter-spacing:1.5px;color:var(--faint);text-transform:uppercase;display:flex;align-items:center;gap:10px}
 .sync-hint::before{content:"";width:26px;height:1px;background:var(--faint)}
-.sync-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-top:14px}
+.sync-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:14px}
 .sync-card{
-  position:relative;background:var(--panel);border:1px solid var(--edge);border-radius:14px;padding:18px 18px 16px;
+  position:relative;background:var(--panel);border:1px solid var(--edge);border-radius:14px;
   overflow:hidden;transition:border-color .5s, box-shadow .5s, transform .4s;
 }
+/* immagine HUD in cima */
+.sync-card .sc-img{position:relative;aspect-ratio:16/9;overflow:hidden;background:#04070E;border-bottom:1px solid var(--edge)}
+.sync-card .sc-img img{width:100%;height:100%;object-fit:cover;display:block;
+  filter:blur(7px) brightness(.32) saturate(.6);transform:scale(1.06);opacity:.7;transition:filter .7s, opacity .7s, transform .7s}
+.sync-card.on .sc-img img{filter:none;opacity:1;transform:scale(1)}
+.sync-card .sc-lock{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  color:var(--faint);transition:opacity .5s}
+.sync-card .sc-lock svg{width:26px;height:26px;stroke:var(--muted);fill:none}
+.sync-card .sc-voice{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
+.sync-card.on .sc-lock{opacity:0;pointer-events:none}
+/* testo sotto */
+.sync-card .sc-txt{padding:14px 16px 15px}
 .sync-card .sc-n{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--faint)}
-.sync-card .sc-ico{height:44px;margin:8px 0 10px;display:flex;align-items:flex-end}
-.sync-card .sc-ico svg{width:40px;height:40px}
-.sync-card h3{font-size:16px;letter-spacing:.2px;margin-bottom:5px;color:var(--muted);transition:color .5s}
-.sync-card p{font-size:14.5px;line-height:1.5;color:var(--faint);transition:color .5s}
-.sync-card .sc-ico svg *{stroke:var(--faint);transition:stroke .5s}
-.sync-card .sc-ico svg [fill]:not([fill="none"]){fill:var(--faint);stroke:none}
-.sync-card .sc-lock{position:absolute;top:14px;right:14px;width:18px;height:18px;opacity:.6;transition:opacity .4s}
-.sync-card .sc-lock svg{width:18px;height:18px;stroke:var(--faint);fill:none}
-.sync-card .sc-voice{font-family:var(--mono);font-size:10.5px;letter-spacing:1px;color:var(--faint);margin-top:8px;opacity:.9}
+.sync-card h3{font-size:16px;letter-spacing:.2px;margin:3px 0 5px;color:var(--muted);transition:color .5s}
+.sync-card p{font-size:14px;line-height:1.5;color:var(--faint);transition:color .5s, opacity .5s;opacity:.7}
 .sync-card.on{border-color:var(--edge2)}
 .sync-card.on h3{color:var(--text)}
-.sync-card.on p{color:#C6D6EE}
-.sync-card.on .sc-ico svg *{stroke:var(--cyan)}
-.sync-card.on .sc-ico svg [fill]:not([fill="none"]){fill:var(--cyan)}
-.sync-card.on .sc-lock{opacity:0}
-.sync-card.on .sc-voice{display:none}
-.sync-card .sc-hidden{opacity:0;filter:blur(4px);transition:opacity .5s, filter .5s;max-height:0;overflow:hidden}
-.sync-card.on .sc-hidden{opacity:1;filter:none;max-height:220px}
-.sync-card.cur{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan), 0 0 26px rgba(65,199,255,.18);transform:translateY(-2px)}
-.sync-card.cur .sc-ico svg *{stroke:var(--gold)}
-.sync-card.cur .sc-ico svg [fill]:not([fill="none"]){fill:var(--gold)}
-.sync-card.cur::after{content:"IN ASCOLTO";position:absolute;top:15px;right:14px;font-family:var(--mono);font-size:8.5px;letter-spacing:1.5px;color:var(--gold)}
+.sync-card.on p{color:#C6D6EE;opacity:1}
+.sync-card.cur{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan), 0 0 26px rgba(65,199,255,.20);transform:translateY(-3px)}
+.sync-card.cur::after{content:"● IN ASCOLTO";position:absolute;top:10px;left:12px;z-index:2;
+  font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:#06121F;background:var(--gold);
+  border-radius:6px;padding:3px 8px;font-weight:700}
 
 /* ---------- SALA CONTROLLO ----------
    Griglia 2×2: planisfero largo e basso in alto (colonna centrale +
@@ -609,66 +608,52 @@ g.city.shielded .city-core{fill:var(--teal)}
     <div class="sync-grid" id="syncGrid">
 
       <div class="sync-card on" data-t="0">
-        <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
-        <div class="sc-n">01</div>
-        <div class="sc-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3.5 12h17M12 3.2c2.4 2.3 3.8 5.5 3.8 8.8s-1.4 6.5-3.8 8.8c-2.4-2.3-3.8-5.5-3.8-8.8S9.6 5.5 12 3.2z"/></svg></div>
-        <h3>La domanda</h3>
-        <p class="sc-hidden">In questo momento un messaggio sta attraversando l'oceano. Come fa ad arrivare dall'altra parte del mondo?</p>
-        <div class="sc-voice">▸ lo racconta la voce</div>
+        <div class="sc-img"><img src="Cyber_1.jpg" alt="Mappa del mondo: un messaggio da Milano all'Australia" loading="lazy">
+          <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="sc-voice">lo racconta la voce</span></div></div>
+        <div class="sc-txt"><div class="sc-n">01</div><h3>La domanda</h3>
+          <p>In questo momento un messaggio sta attraversando l'oceano. Come fa ad arrivare dall'altra parte del mondo?</p></div>
       </div>
 
       <div class="sync-card" data-t="27">
-        <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
-        <div class="sc-n">02</div>
-        <div class="sc-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 10.5c2-2.5 8-2.5 10 0" opacity=".7"/><circle cx="7" cy="10.5" r=".8" fill="currentColor" stroke="none"/><circle cx="17" cy="10.5" r=".8" fill="currentColor" stroke="none"/></svg></div>
-        <h3>La sala di controllo</h3>
-        <p class="sc-hidden">Entri in una sala di controllo vera: un planisfero vivo con cavi sotto il mare, satelliti e antenne.</p>
-        <div class="sc-voice">▸ lo racconta la voce</div>
+        <div class="sc-img"><img src="Cyber_2.jpg" alt="Planisfero pieno di nodi: il traffico Internet in tempo reale" loading="lazy">
+          <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="sc-voice">lo racconta la voce</span></div></div>
+        <div class="sc-txt"><div class="sc-n">02</div><h3>La sala di controllo</h3>
+          <p>Entri in una sala di controllo vera: un planisfero vivo con cavi sotto il mare, satelliti e antenne.</p></div>
       </div>
 
       <div class="sync-card" data-t="54">
-        <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
-        <div class="sc-n">03</div>
-        <div class="sc-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg></div>
-        <h3>Si comanda scrivendo</h3>
-        <p class="sc-hidden">Niente mouse: comandi in inglese, come i professionisti. SEND, PING, TRACE… e HELP se ti serve aiuto.</p>
-        <div class="sc-voice">▸ lo racconta la voce</div>
+        <div class="sc-img"><img src="Cyber_4.jpg" alt="Solo tastiera, niente mouse né menu; il taccuino del codice" loading="lazy">
+          <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="sc-voice">lo racconta la voce</span></div></div>
+        <div class="sc-txt"><div class="sc-n">03</div><h3>Si comanda scrivendo</h3>
+          <p>Niente mouse: comandi in inglese, come i professionisti. SEND, PING, TRACE… e HELP se ti serve aiuto.</p></div>
       </div>
 
       <div class="sync-card" data-t="90">
-        <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
-        <div class="sc-n">04</div>
-        <div class="sc-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9.5C7.5 20 4 17 4 12V6z"/><path d="M8.5 12.5l2 2 4.5-5" /></svg></div>
-        <h3>La carriera</h3>
-        <p class="sc-hidden">Si parte da Recluta. Quattro livelli, cinque missioni ciascuno. In cima: Cyber Guardian.</p>
-        <div class="sc-voice">▸ lo racconta la voce</div>
+        <div class="sc-img"><img src="Cyber_7.jpg" alt="La scala dei gradi: da Recluta a Cyber Guardian" loading="lazy">
+          <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="sc-voice">lo racconta la voce</span></div></div>
+        <div class="sc-txt"><div class="sc-n">04</div><h3>La carriera</h3>
+          <p>Si parte da Recluta. Quattro livelli, cinque missioni ciascuno. In cima: Cyber Guardian.</p></div>
       </div>
 
       <div class="sync-card" data-t="114">
-        <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
-        <div class="sc-n">05</div>
-        <div class="sc-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.8"/></svg></div>
-        <h3>Perché lo fai</h3>
-        <p class="sc-hidden">Internet lo usi ogni giorno, ma nessuno te lo fa vedere. Oggi lo vedi — e scopri quanto racconta la rete.</p>
-        <div class="sc-voice">▸ lo racconta la voce</div>
+        <div class="sc-img"><img src="Cyber_6.jpg" alt="Dalla fibra ottica ai metadati: dispositivo, posizione, tempo di connessione" loading="lazy">
+          <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="sc-voice">lo racconta la voce</span></div></div>
+        <div class="sc-txt"><div class="sc-n">05</div><h3>Perché lo fai</h3>
+          <p>Internet lo usi ogni giorno, ma nessuno te lo fa vedere. Oggi lo vedi — e scopri quanto racconta la rete.</p></div>
       </div>
 
       <div class="sync-card" data-t="146">
-        <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
-        <div class="sc-n">06</div>
-        <div class="sc-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5 2.5 20.5h19L12 3.5z"/><path d="M12 10v4.5"/><circle cx="12" cy="17.6" r=".5" fill="currentColor" stroke="none"/></svg></div>
-        <h3>L'attività strana</h3>
-        <p class="sc-hidden">Gli strumenti hanno registrato qualcosa di anomalo nella rete. A un certo punto si farà viva…</p>
-        <div class="sc-voice">▸ lo racconta la voce</div>
+        <div class="sc-img"><img src="Cyber_8.jpg" alt="System alert: attività strana, meccanismo inceppato, protocollo di riparazione" loading="lazy">
+          <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="sc-voice">lo racconta la voce</span></div></div>
+        <div class="sc-txt"><div class="sc-n">06</div><h3>L'attività strana</h3>
+          <p>Gli strumenti hanno registrato qualcosa di anomalo nella rete. A un certo punto si farà viva…</p></div>
       </div>
 
       <div class="sync-card" data-t="180">
-        <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
-        <div class="sc-n">07</div>
-        <div class="sc-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M13 9l3 3-3 3"/></svg></div>
-        <h3>Benvenuto in sala</h3>
-        <p class="sc-hidden">La domanda dell'inizio non avrà più segreti. Scrivi HELP… e benvenuto in sala controllo.</p>
-        <div class="sc-voice">▸ lo racconta la voce</div>
+        <div class="sc-img"><img src="Cyber_9.jpg" alt="Benvenuti in sala controllo. Scrivere: HELP" loading="lazy">
+          <div class="sc-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="sc-voice">lo racconta la voce</span></div></div>
+        <div class="sc-txt"><div class="sc-n">07</div><h3>Benvenuto in sala</h3>
+          <p>La domanda dell'inizio non avrà più segreti. Scrivi HELP… e benvenuto in sala controllo.</p></div>
       </div>
 
     </div>
@@ -2245,8 +2230,8 @@ const DOC_TABS=[
 <p>Il briefing usa un file vocale (<b>discorso.mp3</b>, ≈3 min) registrato dal docente. Le sette schede si sbloccano su <b>timestamp</b> tarati sul discorso; se in futuro si cambia la registrazione, basta ritoccare i valori <code>data-t</code> delle schede (in secondi). Il browser richiede un tocco su "play" prima di riprodurre: in classe lo avvia il docente.</p>
 <h3>Suoni ed effetti di gioco</h3>
 <p>Gli effetti in sala controllo sono <b>sintetizzati al volo con la Web Audio API</b>: nessun file audio, volume discreto, disattivabili con il pulsante altoparlante in alto. Il suono parte solo dopo il primo gesto dello studente (vincolo dei browser, rispettato per progettazione). In laboratorio con più postazioni: cuffie, o suoni spenti.</p>
-<h3>Requisiti</h3>
-<p>File singolo, nessuna installazione: si apre con doppio clic su iPad, iMac o LIM. Funziona interamente offline (serve la rete solo per i font).</p>`
+<h3>Requisiti e file</h3>
+<p>Si apre con doppio clic su iPad, iMac o LIM; funziona offline (la rete serve solo per i font). L’esperienza non è più un file unico: accanto a <b>index.html</b> devono restare nella stessa cartella <b>discorso.mp3</b> (voce del briefing) e le immagini <b>Cyber_1…9.jpg</b> delle tappe. In fase di pubblicazione su Vercel vanno caricati tutti insieme.</p>`
 ];
 const modalBg=document.getElementById('modalBg');
 const mbody=document.getElementById('mbody');
